@@ -45,22 +45,22 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional(rollbackOn = {CustomException.class})
     public ApiResponse<?> register(UserRegisterRequestDTO userRegisterRequestDTO) throws CustomException {
-        if (userRepository.existsUserByEmail(userRegisterRequestDTO.getEmail())) {
-            throw new CustomException(ErrorCode.USER_EXISTED);
-        }
+//        if (userRepository.existsUserByEmail(userRegisterRequestDTO.getEmail())) {
+//            throw new CustomException(ErrorCode.USER_EXISTED);
+//        }
+//
+//        User user = new User();
+//
+//        user.setUsername(userRegisterRequestDTO.getUsername());
+//        user.setPassword(passwordEncoder.encode(userRegisterRequestDTO.getPassword()));
+//        user.setLevel(2L);
+//        user.setRole(UserRole.USER.getCode());
+//        user.setPhoneNumber(userRegisterRequestDTO.getPhoneNumber());
+//        user.setDateOfBirth(userRegisterRequestDTO.getDateOfBirth());
+//        user.setEmailVerify(false);
+//        user.setEmail(userRegisterRequestDTO.getEmail());
+//        userRepository.save(user);
 
-        User user = new User();
-
-        user.setUsername(userRegisterRequestDTO.getUsername());
-        user.setPassword(passwordEncoder.encode(userRegisterRequestDTO.getPassword()));
-        user.setLevel(2L);
-        user.setRole(UserRole.USER.getCode());
-        user.setPhoneNumber(userRegisterRequestDTO.getPhoneNumber());
-        user.setDateOfBirth(userRegisterRequestDTO.getDateOfBirth());
-        user.setEmailVerify(false);
-        user.setEmail(userRegisterRequestDTO.getEmail());
-        userRepository.save(user);
-
-        return ApiResponse.successWithResult(user);
+        return ApiResponse.successWithResult(true);
     }
 }

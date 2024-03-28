@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @AllArgsConstructor
-public class Like {
+public class LikeManga {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
