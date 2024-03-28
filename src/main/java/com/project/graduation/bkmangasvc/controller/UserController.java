@@ -8,11 +8,13 @@ import com.project.graduation.bkmangasvc.model.ApiResponse;
 import com.project.graduation.bkmangasvc.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
 @RestController
 @RequestMapping(path = "api/v1/")
+@CrossOrigin(origins = "*")
 public class UserController {
     final private AuthService authService;
 
@@ -24,5 +26,22 @@ public class UserController {
     @PostMapping(path = "/register")
     public ApiResponse<?> register(@Valid @RequestBody UserRegisterRequestDTO userRegisterRequestDTO) throws CustomException {
         return authService.register(userRegisterRequestDTO);
+    }
+
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping(path = "/test/user")
+    public String testUser() {
+        return "USER";
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping(path = "/test/admin")
+    public String testAdmin() {
+        return "ADMIN";
+    }
+
+    @GetMapping(path = "/testing")
+    public ApiResponse<String> test() {
+        return ApiResponse.successWithResult("TEST");
     }
 }

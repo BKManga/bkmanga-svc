@@ -12,38 +12,35 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 @AllArgsConstructor
-public class User {
+public class Manga {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String username;
+    private String name;
 
     @Column(nullable = false)
-    private String fullName;
+    private Integer manga_status;
 
     @Column(nullable = false)
-    private String password;
-
-    @Column(nullable = false, unique = true)
-    private String email;
+    private String otherName;
 
     @Column(nullable = false)
-    private String role;
+    private Integer ageRange;
 
     @Column(nullable = false)
-    private String dateOfBirth;
+    private Long mangaAuthorID;
 
     @Column(nullable = false)
-    private String phoneNumber;
+    private Long genreMangaID;
+
+    @Column(nullable = false, length = 512)
+    private String description;
 
     @Column(nullable = false)
-    private Integer gender;
-
-    @Column(nullable = false)
-    private Long levelID;
+    private Long updatedBy;
 
     @Column(
             insertable=false,

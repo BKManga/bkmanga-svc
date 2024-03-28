@@ -12,38 +12,35 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 @AllArgsConstructor
-public class User {
+public class OutLawReport {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String username;
+    private Long userIDReported;
+
+    @Column()
+    private Long commentIDReported;
 
     @Column(nullable = false)
-    private String fullName;
+    private Integer outLawType;
 
     @Column(nullable = false)
-    private String password;
+    private Integer status;
 
-    @Column(nullable = false, unique = true)
-    private String email;
-
-    @Column(nullable = false)
-    private String role;
+    @Column()
+    private String description;
 
     @Column(nullable = false)
-    private String dateOfBirth;
+    private Integer areaID;
 
     @Column(nullable = false)
-    private String phoneNumber;
+    private Long uploadedBy;
 
     @Column(nullable = false)
-    private Integer gender;
-
-    @Column(nullable = false)
-    private Long levelID;
+    private Long updatedBy;
 
     @Column(
             insertable=false,
