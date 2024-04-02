@@ -42,8 +42,11 @@ public class User {
     @Column(nullable = false)
     private Integer gender;
 
+    @Column()
+    private Long levelId;
+
     @Column(nullable = false)
-    private Long levelID;
+    private Integer status;
 
     @Column(
             insertable=false,

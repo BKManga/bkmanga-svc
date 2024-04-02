@@ -19,10 +19,10 @@ public class Chapter {
     private Long id;
 
     @Column(nullable = false)
-    private String title;
+    private String name;
 
     @Column(nullable = false)
-    private Long mangaID;
+    private Long manga;
 
     @Column(nullable = false)
     private Long uploadedBy;

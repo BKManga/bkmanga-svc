@@ -2,17 +2,21 @@ package com.project.graduation.bkmangasvc.service.impl;
 
 import com.project.graduation.bkmangasvc.constant.ErrorCode;
 import com.project.graduation.bkmangasvc.constant.UserRole;
+import com.project.graduation.bkmangasvc.constant.UserStatus;
 import com.project.graduation.bkmangasvc.dto.request.UserLoginRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.UserRegisterRequestDTO;
 import com.project.graduation.bkmangasvc.dto.response.UserLoginResponseDTO;
+import com.project.graduation.bkmangasvc.entity.Level;
 import com.project.graduation.bkmangasvc.entity.User;
 import com.project.graduation.bkmangasvc.exception.CustomException;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
+import com.project.graduation.bkmangasvc.repository.LevelRepository;
 import com.project.graduation.bkmangasvc.repository.UserRepository;
 import com.project.graduation.bkmangasvc.service.AuthService;
 import com.project.graduation.bkmangasvc.util.TokenUtil;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,6 +32,11 @@ public class AuthServiceImpl implements AuthService {
     private final TokenUtil tokenUtil;
 
     private final UserRepository userRepository;
+
+    private final LevelRepository levelRepository;
+
+    private final ModelMapper modelMapper;
+
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
@@ -45,22 +54,26 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional(rollbackOn = {CustomException.class})
     public ApiResponse<?> register(UserRegisterRequestDTO userRegisterRequestDTO) throws CustomException {
-//        if (userRepository.existsUserByEmail(userRegisterRequestDTO.getEmail())) {
-//            throw new CustomException(ErrorCode.USER_EXISTED);
-//        }
-//
-//        User user = new User();
-//
-//        user.setUsername(userRegisterRequestDTO.getUsername());
-//        user.setPassword(passwordEncoder.encode(userRegisterRequestDTO.getPassword()));
-//        user.setLevel(2L);
-//        user.setRole(UserRole.USER.getCode());
-//        user.setPhoneNumber(userRegisterRequestDTO.getPhoneNumber());
-//        user.setDateOfBirth(userRegisterRequestDTO.getDateOfBirth());
-//        user.setEmailVerify(false);
-//        user.setEmail(userRegisterRequestDTO.getEmail());
-//        userRepository.save(user);
+        if (userRepository.existsUserByEmail(userRegisterRequestDTO.getEmail())) {
+            throw new CustomException(ErrorCode.USER_EXISTED);
+        }
 
+        User user = new User();
+
+        modelMapper.map(userRegisterRequestDTO, user);
+
+        user.setPassword(passwordEncoder.encode(userRegisterRequestDTO.getPassword()));
+        user.setStatus(UserStatus.ACTIVE.getCode());
+        userRepository.save(user);
+
+        Level level = new Level();
+
+        level.setUser(user.getId());
+        level.setPoint(0L);
+        levelRepository.save(level);
+
+        user.setLevelId(level.getId());
+        userRepository.save(user);
         return ApiResponse.successWithResult(true);
     }
 }

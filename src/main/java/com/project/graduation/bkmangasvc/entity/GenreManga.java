@@ -16,8 +16,8 @@ public class GenreManga {
     private Long id;
 
     @Column(nullable = false)
-    private Integer genreID;
+    private Integer genre;
 
     @Column(nullable = false)
-    private Long mangaID;
+    private Long manga;
 }

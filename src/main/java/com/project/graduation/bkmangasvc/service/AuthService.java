@@ -8,6 +8,5 @@ import com.project.graduation.bkmangasvc.model.ApiResponse;
 
 public interface AuthService {
     ApiResponse<UserLoginResponseDTO> login(UserLoginRequestDTO userLoginRequestDTO);
-
     ApiResponse<?> register(UserRegisterRequestDTO userRegisterRequestDTO) throws CustomException;
 }

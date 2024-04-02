@@ -16,7 +16,7 @@ public class ViewManga {
     private Long id;
 
     @Column(nullable = false)
-    private Long mangaID;
+    private Long manga;
 
     @Column(nullable = false)
     private Long numberOfViews;

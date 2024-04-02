@@ -16,5 +16,9 @@ public class ErrorReportStatus {
     private Integer id;
 
     @Column(nullable = false)
-    private String statusName;
+    private String name;
+
+    public ErrorReportStatus(String name) {
+        this.name = name;
+    }
 }

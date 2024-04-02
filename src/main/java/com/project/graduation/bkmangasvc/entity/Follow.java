@@ -16,8 +16,8 @@ public class Follow {
     private Long id;
 
     @Column(nullable = false)
-    private Long userID;
+    private Long user;
 
     @Column(nullable = false)
-    private Long mangaID;
+    private Long manga;
 }

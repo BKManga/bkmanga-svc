@@ -22,10 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class AuthFilter extends OncePerRequestFilter {
 
@@ -53,7 +50,9 @@ public class AuthFilter extends OncePerRequestFilter {
                 String userName = tokenUtil.verifyToken(token);
                 User user = userService.findByUsername(userName);
                 List<GrantedAuthority> authorities = new ArrayList<>();
-                authorities.add(new SimpleGrantedAuthority(user.getRole()));
+                Arrays.stream(user.getRole().split("/")).forEach(role -> {
+                    authorities.add(new SimpleGrantedAuthority(role));
+                });
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(user.getId(), null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);

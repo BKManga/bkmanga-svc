@@ -28,6 +28,7 @@ public class SecurityConfig {
             "v3/api-docs",
             "v3/api-docs.yaml",
             "api/v1/testing",
+            "api/v1/genre/all",
             "/swagger-ui/index.html"
     };
 

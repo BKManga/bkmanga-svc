@@ -18,10 +18,10 @@ public class MangaComment {
     private Long id;
 
     @Column(nullable = false)
-    private Long mangaID;
+    private Long manga;
 
     @Column(nullable = false)
-    private Long userID;
+    private Long user;
 
     @Column(nullable = false, length = 512)
     private String content;

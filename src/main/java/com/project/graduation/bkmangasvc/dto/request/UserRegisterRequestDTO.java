@@ -15,6 +15,17 @@ public class UserRegisterRequestDTO {
 
     @NotBlank
     @NotNull
+    private String fullName;
+
+    @NotBlank
+    @NotNull
+    private String role;
+
+    @NotNull
+    private Integer gender;
+
+    @NotBlank
+    @NotNull
     private String password;
 
     @NotBlank

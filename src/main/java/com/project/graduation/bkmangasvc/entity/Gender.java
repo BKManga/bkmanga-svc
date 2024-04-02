@@ -16,5 +16,5 @@ public class Gender {
     private Integer id;
 
     @Column(nullable = false)
-    private String genderName;
+    private String name;
 }

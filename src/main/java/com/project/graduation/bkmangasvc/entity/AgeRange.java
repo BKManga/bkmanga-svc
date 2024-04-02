@@ -17,4 +17,8 @@ public class AgeRange {
 
     @Column(nullable = false)
     private String name;
+
+    public AgeRange(String name) {
+        this.name = name;
+    }
 }

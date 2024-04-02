@@ -16,5 +16,9 @@ public class MangaStatus {
     private Integer id;
 
     @Column(nullable = false)
-    private String statusName;
+    private String name;
+
+    public MangaStatus(String name) {
+        this.name = name;
+    }
 }

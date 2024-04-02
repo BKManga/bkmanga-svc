@@ -16,7 +16,7 @@ public class Rule {
     private Integer id;
 
     @Column(nullable = false)
-    private String ruleName;
+    private String name;
 
     @Column(nullable = false, length = 512)
     private String description;

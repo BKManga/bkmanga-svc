@@ -18,10 +18,10 @@ public class ChapterComment {
     private Long id;
 
     @Column(nullable = false)
-    private Long chapterID;
+    private Long chapter;
 
     @Column(nullable = false)
-    private Long userID;
+    private Long user;
 
     @Column(nullable = false, length = 512)
     private String content;

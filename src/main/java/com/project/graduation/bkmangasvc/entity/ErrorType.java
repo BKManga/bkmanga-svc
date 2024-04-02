@@ -16,5 +16,9 @@ public class ErrorType {
     private Integer id;
 
     @Column(nullable = false)
-    private String typeName;
+    private String name;
+
+    public ErrorType(String name) {
+        this.name = name;
+    }
 }

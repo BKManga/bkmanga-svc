@@ -19,10 +19,10 @@ public class ChapterReport {
     private Long id;
 
     @Column(nullable = false)
-    private Long chapterID;
+    private Long chapter;
 
     @Column(nullable = false)
-    private Long mangaID;
+    private Long manga;
 
     @Column()
     private String description;

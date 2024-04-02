@@ -16,11 +16,11 @@ public class History {
     private Long id;
 
     @Column(nullable = false)
-    private Long userID;
+    private Long user;
 
     @Column(nullable = false)
-    private Long mangaID;
+    private Long manga;
 
     @Column(nullable = false)
-    private Long chapterID;
+    private Long chapter;
 }

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(path = "api/v1/")
 @CrossOrigin(origins = "*")
-public class UserController {
+public class AuthController {
     final private AuthService authService;
 
     @PostMapping(path = "/login")
@@ -24,7 +24,9 @@ public class UserController {
     }
 
     @PostMapping(path = "/register")
-    public ApiResponse<?> register(@Valid @RequestBody UserRegisterRequestDTO userRegisterRequestDTO) throws CustomException {
+    public ApiResponse<?> register(
+            @Valid @RequestBody UserRegisterRequestDTO userRegisterRequestDTO
+    ) throws CustomException {
         return authService.register(userRegisterRequestDTO);
     }
 

@@ -19,22 +19,22 @@ public class OutLawReport {
     private Long id;
 
     @Column(nullable = false)
-    private Long userIDReported;
+    private Long userReported;
 
     @Column()
-    private Long commentIDReported;
+    private Long commentReported;
 
     @Column(nullable = false)
     private Integer outLawType;
 
     @Column(nullable = false)
-    private Integer status;
+    private Integer outLawStatus;
 
     @Column()
     private String description;
 
     @Column(nullable = false)
-    private Integer areaID;
+    private Integer area;
 
     @Column(nullable = false)
     private Long uploadedBy;

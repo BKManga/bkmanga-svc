@@ -16,5 +16,9 @@ public class OutLawArea {
     private Integer id;
 
     @Column(nullable = false)
-    private String areaName;
+    private String name;
+
+    public OutLawArea(String name) {
+        this.name = name;
+    }
 }

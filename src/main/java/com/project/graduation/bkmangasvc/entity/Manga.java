@@ -22,7 +22,7 @@ public class Manga {
     private String name;
 
     @Column(nullable = false)
-    private Integer manga_status;
+    private Integer mangaStatus;
 
     @Column(nullable = false)
     private String otherName;
@@ -31,10 +31,10 @@ public class Manga {
     private Integer ageRange;
 
     @Column(nullable = false)
-    private Long mangaAuthorID;
+    private Long mangaAuthor;
 
     @Column(nullable = false)
-    private Long genreMangaID;
+    private Long genreManga;
 
     @Column(nullable = false, length = 512)
     private String description;

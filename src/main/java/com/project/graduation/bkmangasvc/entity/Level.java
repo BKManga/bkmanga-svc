@@ -16,7 +16,7 @@ public class Level {
     private Long id;
 
     @Column(nullable = false)
-    private Long userID;
+    private Long user;
 
     @Column(nullable = false)
     private Long point;

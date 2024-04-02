@@ -16,5 +16,9 @@ public class Genre {
     private Integer id;
 
     @Column(nullable = false)
-    private String genreName;
+    private String name;
+
+    public Genre(String name) {
+        this.name = name;
+    }
 }
