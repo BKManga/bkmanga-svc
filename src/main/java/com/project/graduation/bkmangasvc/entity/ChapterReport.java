@@ -1,5 +1,6 @@
 package com.project.graduation.bkmangasvc.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,16 +20,10 @@ public class ChapterReport {
     private Long id;
 
     @Column(nullable = false)
-    private Long chapter;
-
-    @Column(nullable = false)
     private Long manga;
 
     @Column()
     private String description;
-
-    @Column(nullable = false)
-    private Integer errorType;
 
     @Column(nullable = false)
     private Long uploadedBy;
@@ -50,4 +45,19 @@ public class ChapterReport {
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
     )
     private Date updatedAt;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "error_type_id")
+    private ErrorType errorType;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "chapter_id")
+    private Chapter chapter;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "error_report_status_id")
+    private ErrorReportStatus errorReportStatus;
 }

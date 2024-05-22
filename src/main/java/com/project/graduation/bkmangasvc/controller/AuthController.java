@@ -6,6 +6,7 @@ import com.project.graduation.bkmangasvc.dto.response.UserLoginResponseDTO;
 import com.project.graduation.bkmangasvc.exception.CustomException;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
 import com.project.graduation.bkmangasvc.service.AuthService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,6 +25,7 @@ public class AuthController {
     }
 
     @PostMapping(path = "/register")
+    @Transactional(rollbackOn = {CustomException.class})
     public ApiResponse<?> register(
             @Valid @RequestBody UserRegisterRequestDTO userRegisterRequestDTO
     ) throws CustomException {

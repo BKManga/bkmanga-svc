@@ -29,7 +29,8 @@ public class SecurityConfig {
             "v3/api-docs.yaml",
             "api/v1/testing",
             "api/v1/genre/all",
-            "/swagger-ui/index.html"
+            "api/v1/privacyPolicy/all",
+            "/swagger-ui/index.html",
     };
 
     @Bean
@@ -47,7 +48,7 @@ public class SecurityConfig {
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(publicEndPoints).permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .addFilterAfter(authFilter(), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

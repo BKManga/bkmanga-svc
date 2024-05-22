@@ -1,5 +1,6 @@
 package com.project.graduation.bkmangasvc.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,12 +18,6 @@ public class ChapterComment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long chapter;
-
-    @Column(nullable = false)
-    private Long user;
-
     @Column(nullable = false, length = 512)
     private String content;
 
@@ -32,4 +27,14 @@ public class ChapterComment {
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
     )
     private Date createdAt;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "chapter_id")
+    private Chapter chapter;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "user_id")
+    private User user;
 }

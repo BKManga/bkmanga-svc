@@ -1,5 +1,6 @@
 package com.project.graduation.bkmangasvc.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,17 +25,8 @@ public class OutLawReport {
     @Column()
     private Long commentReported;
 
-    @Column(nullable = false)
-    private Integer outLawType;
-
-    @Column(nullable = false)
-    private Integer outLawStatus;
-
     @Column()
     private String description;
-
-    @Column(nullable = false)
-    private Integer area;
 
     @Column(nullable = false)
     private Long uploadedBy;
@@ -56,4 +48,19 @@ public class OutLawReport {
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
     )
     private Date updatedAt;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "out_law_status_id")
+    private OutLawProcessStatus outLawProcessStatus;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "out_law_type_id")
+    private OutLawType outLawType;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "out_law_area_id")
+    private OutLawArea outLawArea;
 }

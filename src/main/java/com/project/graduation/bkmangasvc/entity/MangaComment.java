@@ -1,5 +1,6 @@
 package com.project.graduation.bkmangasvc.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,12 +18,6 @@ public class MangaComment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long manga;
-
-    @Column(nullable = false)
-    private Long user;
-
     @Column(nullable = false, length = 512)
     private String content;
 
@@ -32,4 +27,14 @@ public class MangaComment {
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
     )
     private Date createdAt;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "manga_id")
+    private Manga manga;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "user_id")
+    private User user;
 }

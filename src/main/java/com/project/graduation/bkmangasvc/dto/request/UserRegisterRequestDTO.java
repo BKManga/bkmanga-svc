@@ -21,9 +21,6 @@ public class UserRegisterRequestDTO {
     @NotNull
     private String role;
 
-    @NotNull
-    private Integer gender;
-
     @NotBlank
     @NotNull
     private String password;
@@ -39,4 +36,7 @@ public class UserRegisterRequestDTO {
     @NotBlank
     @NotNull
     private String phoneNumber;
+
+    @NotNull
+    private Integer genderId;
 }

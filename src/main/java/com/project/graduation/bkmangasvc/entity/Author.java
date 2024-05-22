@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @NoArgsConstructor
 @Data
@@ -17,4 +20,7 @@ public class Author {
 
     @Column(nullable = false)
     private String name;
+
+    @OneToMany(mappedBy = "author")
+    private List<MangaAuthor> mangaAuthorList = new ArrayList<>();
 }

@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @NoArgsConstructor
 @Data
@@ -21,4 +24,7 @@ public class AgeRange {
     public AgeRange(String name) {
         this.name = name;
     }
+
+    @OneToMany(mappedBy = "ageRange")
+    private List<Manga> mangaList = new ArrayList<>();
 }

@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum UserStatus {
+public enum UserStatusEnum {
     ACTIVE(1, "active"),
     BANNED(2, "banned"),
     DISABLED(3, "disabled");

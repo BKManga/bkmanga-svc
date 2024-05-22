@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @NoArgsConstructor
 @Data
@@ -17,6 +19,9 @@ public class UserStatus {
 
     @Column(nullable = false)
     private String name;
+
+    @OneToMany(mappedBy = "userStatus")
+    private List<User> userList;
 
     public UserStatus(String name) {
         this.name = name;

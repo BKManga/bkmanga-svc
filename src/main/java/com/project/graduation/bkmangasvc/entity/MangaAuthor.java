@@ -1,5 +1,6 @@
 package com.project.graduation.bkmangasvc.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,9 +16,13 @@ public class MangaAuthor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long manga;
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "author_id")
+    private Author author;
 
-    @Column(nullable = false)
-    private Integer author;
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "manga_id")
+    private Manga manga;
 }

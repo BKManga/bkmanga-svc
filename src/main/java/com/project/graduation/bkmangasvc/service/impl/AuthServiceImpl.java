@@ -1,17 +1,20 @@
 package com.project.graduation.bkmangasvc.service.impl;
 
 import com.project.graduation.bkmangasvc.constant.ErrorCode;
-import com.project.graduation.bkmangasvc.constant.UserRole;
-import com.project.graduation.bkmangasvc.constant.UserStatus;
+import com.project.graduation.bkmangasvc.constant.UserStatusEnum;
 import com.project.graduation.bkmangasvc.dto.request.UserLoginRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.UserRegisterRequestDTO;
 import com.project.graduation.bkmangasvc.dto.response.UserLoginResponseDTO;
+import com.project.graduation.bkmangasvc.entity.Gender;
 import com.project.graduation.bkmangasvc.entity.Level;
 import com.project.graduation.bkmangasvc.entity.User;
+import com.project.graduation.bkmangasvc.entity.UserStatus;
 import com.project.graduation.bkmangasvc.exception.CustomException;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
+import com.project.graduation.bkmangasvc.repository.GenderRepository;
 import com.project.graduation.bkmangasvc.repository.LevelRepository;
 import com.project.graduation.bkmangasvc.repository.UserRepository;
+import com.project.graduation.bkmangasvc.repository.UserStatusRepository;
 import com.project.graduation.bkmangasvc.service.AuthService;
 import com.project.graduation.bkmangasvc.util.TokenUtil;
 import jakarta.transaction.Transactional;
@@ -24,6 +27,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -34,6 +39,10 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
 
     private final LevelRepository levelRepository;
+
+    private final UserStatusRepository userStatusRepository;
+
+    private final GenderRepository genderRepository;
 
     private final ModelMapper modelMapper;
 
@@ -52,7 +61,6 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    @Transactional(rollbackOn = {CustomException.class})
     public ApiResponse<?> register(UserRegisterRequestDTO userRegisterRequestDTO) throws CustomException {
         if (userRepository.existsUserByEmail(userRegisterRequestDTO.getEmail())) {
             throw new CustomException(ErrorCode.USER_EXISTED);
@@ -63,17 +71,23 @@ public class AuthServiceImpl implements AuthService {
         modelMapper.map(userRegisterRequestDTO, user);
 
         user.setPassword(passwordEncoder.encode(userRegisterRequestDTO.getPassword()));
-        user.setStatus(UserStatus.ACTIVE.getCode());
+
+        Optional<Gender> foundGender = genderRepository.findById(userRegisterRequestDTO.getGenderId());
+
+        Optional<UserStatus> foundUserStatus = userStatusRepository.findById(UserStatusEnum.ACTIVE.getCode());
+
+        if (foundGender.isEmpty() || foundUserStatus.isEmpty()) {
+            throw new CustomException(ErrorCode.UNKNOWN_ERROR);
+        }
+
+        user.setUserStatus(foundUserStatus.get());
+        user.setGender(foundGender.get());
+
         userRepository.save(user);
 
-        Level level = new Level();
+        Level level = new Level(user, 0L);
 
-        level.setUser(user.getId());
-        level.setPoint(0L);
         levelRepository.save(level);
-
-        user.setLevelId(level.getId());
-        userRepository.save(user);
         return ApiResponse.successWithResult(true);
     }
 }

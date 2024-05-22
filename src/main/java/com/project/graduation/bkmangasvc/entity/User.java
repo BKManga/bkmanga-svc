@@ -1,12 +1,15 @@
 package com.project.graduation.bkmangasvc.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -39,15 +42,6 @@ public class User {
     @Column(nullable = false)
     private String phoneNumber;
 
-    @Column(nullable = false)
-    private Integer gender;
-
-    @Column()
-    private Long levelId;
-
-    @Column(nullable = false)
-    private Integer status;
-
     @Column(
             insertable=false,
             updatable=false,
@@ -62,4 +56,29 @@ public class User {
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
     )
     private Date updatedAt;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "gender_id", nullable = false)
+    private Gender gender;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "status_id", nullable = false)
+    private UserStatus userStatus;
+
+    @OneToMany(mappedBy = "user")
+    private List<ChapterComment> chapterCommentList;
+
+    @OneToMany(mappedBy = "user")
+    private List<MangaComment> mangaCommentList;
+
+    @OneToOne(mappedBy = "user")
+    private Level level;
+
+    @OneToMany(mappedBy = "user")
+    private List<History> historyList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Follow> followList = new ArrayList<>();
 }

@@ -1,5 +1,6 @@
 package com.project.graduation.bkmangasvc.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,8 +17,10 @@ public class ViewManga {
     private Long id;
 
     @Column(nullable = false)
-    private Long manga;
-
-    @Column(nullable = false)
     private Long numberOfViews;
+
+    @OneToOne
+    @JsonIgnore
+    @JoinColumn(name = "manga_id")
+    private Manga manga;
 }

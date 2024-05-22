@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @NoArgsConstructor
 @Data
@@ -18,7 +21,14 @@ public class Genre {
     @Column(nullable = false)
     private String name;
 
-    public Genre(String name) {
+    @Column(nullable = false, length = 512)
+    private String description;
+
+    public Genre(String name, String description) {
         this.name = name;
+        this.description = description;
     }
+
+    @OneToMany(mappedBy = "genre")
+    private List<GenreManga> genreMangaList = new ArrayList<>();
 }

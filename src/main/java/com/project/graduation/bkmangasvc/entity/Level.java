@@ -1,5 +1,6 @@
 package com.project.graduation.bkmangasvc.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,9 +16,16 @@ public class Level {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long user;
+    @OneToOne
+    @JsonIgnore
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(nullable = false)
     private Long point;
+
+    public Level(User user, Long point) {
+        this.user = user;
+        this.point = point;
+    }
 }

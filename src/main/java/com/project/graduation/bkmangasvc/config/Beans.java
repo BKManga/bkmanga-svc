@@ -12,7 +12,6 @@ public class Beans {
         ModelMapper modelMapper = new ModelMapper();
 
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-
         return modelMapper;
     }
 }

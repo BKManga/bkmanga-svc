@@ -1,13 +1,11 @@
 package com.project.graduation.bkmangasvc.controller;
 
 import com.project.graduation.bkmangasvc.entity.Genre;
+import com.project.graduation.bkmangasvc.exception.CustomException;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
 import com.project.graduation.bkmangasvc.service.GenreService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,5 +19,10 @@ public class GenreController {
     @GetMapping(path = "/all")
     public ApiResponse<List<Genre>> getAllGenre() {
         return genreService.getAllGenre();
+    }
+
+    @GetMapping(path = "/{id}")
+    public ApiResponse<Genre> getGenreById(@PathVariable Integer id) throws CustomException {
+        return genreService.getGenreById(id);
     }
 }

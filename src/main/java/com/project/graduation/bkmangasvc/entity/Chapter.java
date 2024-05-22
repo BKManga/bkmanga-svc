@@ -1,12 +1,15 @@
 package com.project.graduation.bkmangasvc.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -20,9 +23,6 @@ public class Chapter {
 
     @Column(nullable = false)
     private String name;
-
-    @Column(nullable = false)
-    private Long manga;
 
     @Column(nullable = false)
     private Long uploadedBy;
@@ -41,4 +41,15 @@ public class Chapter {
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
     )
     private Date updatedAt;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "manga_id")
+    private Manga manga;
+
+    @OneToMany(mappedBy = "chapter")
+    private List<ChapterComment> chapterCommentList;
+
+    @OneToMany(mappedBy = "chapter")
+    private List<ChapterReport> chapterReportList = new ArrayList<>();
 }
