@@ -9,5 +9,8 @@ import lombok.Data;
 public class DeleteMangaCommentRequestDTO {
 
     @NotNull
-    private Long id;
+    private Long mangaCommentId;
+
+    @NotNull
+    private Long userId;
 }

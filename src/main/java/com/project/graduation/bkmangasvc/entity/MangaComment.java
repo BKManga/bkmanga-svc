@@ -34,7 +34,7 @@ public class MangaComment {
     private Manga manga;
 
     @ManyToOne
-    @JsonIgnore
+//    @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
 }

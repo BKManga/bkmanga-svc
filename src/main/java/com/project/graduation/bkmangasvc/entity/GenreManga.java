@@ -22,7 +22,12 @@ public class GenreManga {
     private Manga manga;
 
     @ManyToOne
-    @JsonIgnore
+//    @JsonIgnore
     @JoinColumn(name = "genre_id")
     private Genre genre;
+
+    public GenreManga(Manga manga, Genre genre) {
+        this.manga = manga;
+        this.genre = genre;
+    }
 }

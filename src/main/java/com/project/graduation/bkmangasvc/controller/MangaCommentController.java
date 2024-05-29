@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.*;
 public class MangaCommentController {
     private final MangaCommentService mangaCommentService;
 
-    @PostMapping(path = "/all")
-    public ApiResponse<Page<MangaComment>> getMangaComments(
+    @PostMapping(path = "/get")
+    public ApiResponse<Page<MangaComment>> getMangaCommentById(
             @RequestBody GetListMangaCommentRequestDTO mangaCommentListRequestDTO
     ) throws CustomException {
         return mangaCommentService.getMangaCommentByMangaId(mangaCommentListRequestDTO);
@@ -38,7 +38,7 @@ public class MangaCommentController {
     @DeleteMapping(path = "/delete")
     @Transactional(rollbackOn = CustomException.class)
     public ApiResponse<?> deleteMangaComment(
-            DeleteMangaCommentRequestDTO deleteMangaCommentRequestDTO
+            @RequestBody DeleteMangaCommentRequestDTO deleteMangaCommentRequestDTO
     ) throws CustomException {
         return mangaCommentService.deleteMangaComment(deleteMangaCommentRequestDTO);
     }

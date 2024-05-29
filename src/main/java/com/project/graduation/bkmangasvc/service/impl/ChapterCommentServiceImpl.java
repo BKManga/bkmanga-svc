@@ -1,14 +1,13 @@
 package com.project.graduation.bkmangasvc.service.impl;
 
 import com.project.graduation.bkmangasvc.constant.ErrorCode;
+import com.project.graduation.bkmangasvc.constant.SortingOrderBy;
 import com.project.graduation.bkmangasvc.constant.UserStatusEnum;
 import com.project.graduation.bkmangasvc.dto.request.CreateChapterCommentRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.DeleteChapterCommentRequestDTO;
+import com.project.graduation.bkmangasvc.dto.request.GetListChapterCommentRequestDTO;
 import com.project.graduation.bkmangasvc.dto.response.CreateChapterCommentResponseDTO;
-import com.project.graduation.bkmangasvc.entity.Chapter;
-import com.project.graduation.bkmangasvc.entity.ChapterComment;
-import com.project.graduation.bkmangasvc.entity.User;
-import com.project.graduation.bkmangasvc.entity.UserStatus;
+import com.project.graduation.bkmangasvc.entity.*;
 import com.project.graduation.bkmangasvc.exception.CustomException;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
 import com.project.graduation.bkmangasvc.repository.ChapterCommentRepository;
@@ -19,6 +18,9 @@ import com.project.graduation.bkmangasvc.service.ChapterCommentService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -33,8 +35,20 @@ public class ChapterCommentServiceImpl implements ChapterCommentService {
     private final ModelMapper modelMapper;
 
     @Override
-    public ApiResponse<Page<ChapterComment>> getAllChapterComment() {
-        return null;
+    public ApiResponse<Page<ChapterComment>> getChapterCommentByMangaId(
+            GetListChapterCommentRequestDTO getListChapterCommentRequestDTO
+    ) throws CustomException {
+        Chapter chapter = getChapterValue(getListChapterCommentRequestDTO.getIdChapter());
+
+        Pageable pageable = PageRequest.of(
+                getListChapterCommentRequestDTO.getPage(),
+                getListChapterCommentRequestDTO.getSize(),
+                getSorting("createdAt", getListChapterCommentRequestDTO.getOrderBy())
+        );
+
+        Page<ChapterComment> mangaCommentPage = chapterCommentRepository.findChapterCommentByChapter(chapter, pageable);
+
+        return ApiResponse.successWithResult(mangaCommentPage);
     }
 
     @Override
@@ -58,15 +72,21 @@ public class ChapterCommentServiceImpl implements ChapterCommentService {
     public ApiResponse<?> deleteChapterComment(
             DeleteChapterCommentRequestDTO deleteChapterCommentRequestDTO
     ) throws CustomException {
-        ChapterComment chapterComment = getChapterCommentValue(deleteChapterCommentRequestDTO.getId());
+        ChapterComment chapterComment = getChapterCommentValue(
+                deleteChapterCommentRequestDTO.getChapterCommentId(),
+                deleteChapterCommentRequestDTO.getUserId()
+        );
 
         chapterCommentRepository.delete(chapterComment);
 
         return ApiResponse.successWithResult(null);
     }
 
-    private ChapterComment getChapterCommentValue(Long id) throws CustomException {
-        Optional<ChapterComment> foundChapterComment = chapterCommentRepository.findById(id);
+    private ChapterComment getChapterCommentValue(Long id, Long userId) throws CustomException {
+
+        User user = getUserValue(userId);
+
+        Optional<ChapterComment> foundChapterComment = chapterCommentRepository.findChapterCommentByIdAndUser(id, user);
 
         if (foundChapterComment.isEmpty()) {
             throw new CustomException(ErrorCode.CHAPTER_COMMENT_NOT_EXIST);
@@ -99,5 +119,12 @@ public class ChapterCommentServiceImpl implements ChapterCommentService {
         }
 
         return foundChapter.get();
+    }
+
+    private Sort getSorting(String sortField, String sortType) {
+        if (sortType.equalsIgnoreCase(SortingOrderBy.DESC.getOrderBy())) {
+            return Sort.by(sortField).descending();
+        }
+        return Sort.by(sortField).ascending();
     }
 }

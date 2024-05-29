@@ -35,9 +35,11 @@ public class History {
             updatable=false,
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
     )
+    @JsonIgnore
     private Date createdAt;
 
     @UpdateTimestamp
+    @JsonIgnore
     @Column(
             insertable=false,
             updatable=false,

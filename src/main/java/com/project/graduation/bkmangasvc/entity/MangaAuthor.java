@@ -17,7 +17,6 @@ public class MangaAuthor {
     private Long id;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "author_id")
     private Author author;
 

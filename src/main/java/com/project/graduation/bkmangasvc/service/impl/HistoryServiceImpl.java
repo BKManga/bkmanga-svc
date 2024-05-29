@@ -15,10 +15,7 @@ import com.project.graduation.bkmangasvc.service.HistoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -124,26 +121,25 @@ public class HistoryServiceImpl implements HistoryService {
             List<Chapter> chapterList
     ) {
         List<HistoryResponse> historyResponseList = new ArrayList<>();
+
+        Map<Long, Manga> mangaMap = mangaList.stream()
+                .collect(Collectors.toMap(Manga::getId, manga -> manga));
+
+        Map<Long, Chapter> chapterMap = chapterList.stream()
+                .collect(Collectors.toMap(Chapter::getId, chapter -> chapter));
+
         historyList.forEach(history -> {
-            Optional<Manga> foundManga = mangaList
-                    .stream()
-                    .filter(manga -> Objects.equals(manga.getId(), history.getManga()))
-                    .findFirst();
-
-            foundManga.ifPresent(manga -> {
-                Optional<Chapter> foundChapter = chapterList
-                        .stream()
-                        .filter(chapter -> Objects.equals(chapter.getId(), history.getChapter()))
-                        .findFirst();
-
-                foundChapter.ifPresent(chapter -> historyResponseList.add(
-                        new HistoryResponse(
-                                history.getId(),
-                                foundManga.get(),
-                                foundChapter.get()
-                        )
-                ));
-            });
+            Manga foundManga = mangaMap.get(history.getManga());
+            if (foundManga != null) {
+                Chapter foundChapter = chapterMap.get(history.getChapter());
+                if (foundChapter != null) {
+                    historyResponseList.add(new HistoryResponse(
+                            history.getId(),
+                            foundManga,
+                            foundChapter
+                    ));
+                }
+            }
         });
 
         return historyResponseList;

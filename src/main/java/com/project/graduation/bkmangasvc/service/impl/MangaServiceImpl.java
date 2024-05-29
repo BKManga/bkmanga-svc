@@ -22,7 +22,9 @@ public class MangaServiceImpl implements MangaService {
 
         Manga foundManga = getMangaValue(mangaId);
 
-        foundManga.getGenreMangaList().forEach(GenreManga::getGenre);
+        foundManga.getGenreMangaList().forEach(genreManga
+                -> genreManga.getGenre().getGenreMangaList().forEach(GenreManga::getGenre)
+        );
 //        foundManga.getLikeMangaList()
 
         return ApiResponse.successWithResult(foundManga);

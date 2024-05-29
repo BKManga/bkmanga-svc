@@ -25,6 +25,6 @@ public class OutLawArea {
         this.name = name;
     }
 
-    @OneToMany(mappedBy = "outLawArea")
+    @OneToMany(mappedBy = "outLawArea", fetch = FetchType.LAZY)
     private List<OutLawReport> outLawReportList = new ArrayList<>();
 }

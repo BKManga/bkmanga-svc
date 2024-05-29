@@ -25,6 +25,7 @@ public class Chapter {
     private String name;
 
     @Column(nullable = false)
+    @JsonIgnore
     private Long uploadedBy;
 
     @Column(
@@ -32,6 +33,7 @@ public class Chapter {
             updatable=false,
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
     )
+    @JsonIgnore
     private Date createdAt;
 
     @UpdateTimestamp
@@ -47,9 +49,11 @@ public class Chapter {
     @JoinColumn(name = "manga_id")
     private Manga manga;
 
-    @OneToMany(mappedBy = "chapter")
+    @OneToMany(mappedBy = "chapter", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<ChapterComment> chapterCommentList;
 
-    @OneToMany(mappedBy = "chapter")
+    @OneToMany(mappedBy = "chapter", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<ChapterReport> chapterReportList = new ArrayList<>();
 }

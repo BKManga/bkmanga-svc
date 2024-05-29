@@ -1,0 +1,4 @@
+username,full_name,password,email,role,date_of_birth,phone_number,gender_id,status_id
+Tin_Juan_Em_Nhe,Truong Anh Ngoc,Password123,trustmebro@fakenew.com,USER,26/07/2001,0964343115,1,1
+Admin_A,Admin khac cua Page,Password123,admin@bkmanga.com,ADMIN/MODERATOR/USER,26/07/2002,0987654321,1,1
+Moderator_A,Moderator khac cua Page,Password123,moderator@bkmanga.com,MODERATOR/USER,26/07/2003,0123456789,1,1

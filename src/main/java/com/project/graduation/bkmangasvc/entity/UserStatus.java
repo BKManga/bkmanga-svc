@@ -20,7 +20,7 @@ public class UserStatus {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "userStatus")
+    @OneToMany(mappedBy = "userStatus", fetch = FetchType.LAZY)
     private List<User> userList;
 
     public UserStatus(String name) {

@@ -25,6 +25,6 @@ public class ErrorReportStatus {
         this.name = name;
     }
 
-    @OneToMany(mappedBy = "errorReportStatus")
+    @OneToMany(mappedBy = "errorReportStatus", fetch = FetchType.LAZY)
     private List<ChapterReport> chapterReportList = new ArrayList<>();
 }

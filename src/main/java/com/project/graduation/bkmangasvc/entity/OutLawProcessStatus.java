@@ -25,6 +25,6 @@ public class OutLawProcessStatus {
         this.name = name;
     }
 
-    @OneToMany(mappedBy = "outLawProcessStatus")
+    @OneToMany(mappedBy = "outLawProcessStatus", fetch = FetchType.LAZY)
     private List<OutLawReport> outLawReportList = new ArrayList<>();
 }

@@ -21,6 +21,6 @@ public class OutLawType {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "outLawType")
+    @OneToMany(mappedBy = "outLawType", fetch = FetchType.LAZY)
     private List<OutLawReport> outLawReportList = new ArrayList<>();
 }

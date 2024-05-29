@@ -34,7 +34,7 @@ public class ChapterComment {
     private Chapter chapter;
 
     @ManyToOne
-    @JsonIgnore
+//    @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
 }

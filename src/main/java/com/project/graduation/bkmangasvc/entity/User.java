@@ -28,6 +28,7 @@ public class User {
     private String fullName;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     @Column(nullable = false, unique = true)
@@ -47,9 +48,11 @@ public class User {
             updatable=false,
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
     )
+    @JsonIgnore
     private Date createdAt;
 
     @UpdateTimestamp
+    @JsonIgnore
     @Column(
             insertable=false,
             updatable=false,
@@ -67,18 +70,23 @@ public class User {
     @JoinColumn(name = "status_id", nullable = false)
     private UserStatus userStatus;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<ChapterComment> chapterCommentList;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<MangaComment> mangaCommentList;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Level level;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<History> historyList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Follow> followList = new ArrayList<>();
 }

@@ -1,6 +1,7 @@
 package com.project.graduation.bkmangasvc.service.impl;
 
 import com.project.graduation.bkmangasvc.constant.ErrorCode;
+import com.project.graduation.bkmangasvc.constant.SortingOrderBy;
 import com.project.graduation.bkmangasvc.constant.UserStatusEnum;
 import com.project.graduation.bkmangasvc.dto.request.CreateMangaCommentRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.DeleteMangaCommentRequestDTO;
@@ -48,7 +49,7 @@ public class MangaCommentServiceImpl implements MangaCommentService {
         Pageable pageable = PageRequest.of(
                 mangaCommentListRequestDTO.getPage(),
                 mangaCommentListRequestDTO.getSize(),
-                getSorting("created_at", mangaCommentListRequestDTO.getOrderBy())
+                getSorting("createdAt", mangaCommentListRequestDTO.getOrderBy())
         );
 
         Page<MangaComment> mangaCommentPage = mangaCommentRepository.findMangaCommentByManga(foundManga, pageable);
@@ -66,7 +67,7 @@ public class MangaCommentServiceImpl implements MangaCommentService {
         MangaComment mangaComment = new MangaComment();
 
         mangaComment.setManga(foundManga);
-        mangaComment.setContent(mangaComment.getContent());
+        mangaComment.setContent(mangaCommentCreateRequestDTO.getContent());
         mangaComment.setUser(foundUser);
 
         mangaCommentRepository.save(mangaComment);
@@ -78,7 +79,10 @@ public class MangaCommentServiceImpl implements MangaCommentService {
     public ApiResponse<?> deleteMangaComment(
             DeleteMangaCommentRequestDTO deleteMangaCommentRequestDTO
     ) throws CustomException {
-        MangaComment mangaComment = getMangaCommentValue(deleteMangaCommentRequestDTO.getId());
+        MangaComment mangaComment = getMangaCommentValue(
+                deleteMangaCommentRequestDTO.getMangaCommentId(),
+                deleteMangaCommentRequestDTO.getUserId()
+        );
 
         mangaCommentRepository.delete(mangaComment);
 
@@ -111,8 +115,10 @@ public class MangaCommentServiceImpl implements MangaCommentService {
         return foundUser.get();
     }
 
-    private MangaComment getMangaCommentValue(Long id) throws CustomException {
-        Optional<MangaComment> foundMangaComment = mangaCommentRepository.findById(id);
+    private MangaComment getMangaCommentValue(Long id, Long userId) throws CustomException {
+        User user = getUserValue(userId);
+
+        Optional<MangaComment> foundMangaComment = mangaCommentRepository.findMangaCommentByIdAndUser(id, user);
 
         if (foundMangaComment.isEmpty()) {
             throw new CustomException(ErrorCode.MANGA_COMMENT_NOT_EXIST);
@@ -122,7 +128,9 @@ public class MangaCommentServiceImpl implements MangaCommentService {
     }
 
     private Sort getSorting(String sortField, String sortType) {
-        Sort.by(sortField);
-        return Sort.by(sortType);
+        if (sortType.equalsIgnoreCase(SortingOrderBy.DESC.getOrderBy())) {
+            return Sort.by(sortField).descending();
+        }
+        return Sort.by(sortField).ascending();
     }
 }

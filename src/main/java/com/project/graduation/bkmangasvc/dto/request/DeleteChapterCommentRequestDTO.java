@@ -9,5 +9,8 @@ import lombok.Data;
 public class DeleteChapterCommentRequestDTO {
 
     @NotNull
-    private Long id;
+    private Long chapterCommentId;
+
+    @NotNull
+    private Long userId;
 }

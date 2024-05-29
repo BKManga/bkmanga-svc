@@ -25,6 +25,6 @@ public class AgeRange {
         this.name = name;
     }
 
-    @OneToMany(mappedBy = "ageRange")
+    @OneToMany(mappedBy = "ageRange", fetch = FetchType.LAZY)
     private List<Manga> mangaList = new ArrayList<>();
 }

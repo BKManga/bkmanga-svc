@@ -25,6 +25,6 @@ public class MangaStatus {
         this.name = name;
     }
 
-    @OneToMany(mappedBy = "mangaStatus")
+    @OneToMany(mappedBy = "mangaStatus", fetch = FetchType.LAZY)
     private List<Manga> mangaList = new ArrayList<>();
 }
