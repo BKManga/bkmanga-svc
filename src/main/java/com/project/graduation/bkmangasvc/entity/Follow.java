@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Entity
 @NoArgsConstructor
 @Data
@@ -25,4 +27,12 @@ public class Follow {
     @JsonIgnore
     @JoinColumn(name = "manga_id")
     private Manga manga;
+
+    @Column(
+            insertable=false,
+            updatable=false,
+            columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
+    )
+    @JsonIgnore
+    private Date createdAt;
 }

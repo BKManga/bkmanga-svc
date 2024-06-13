@@ -15,6 +15,8 @@ import com.opencsv.CSVReaderBuilder;
 
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Configuration
@@ -34,31 +36,46 @@ public class Database {
     private final MangaCommentRepository mangaCommentRepository;
     private final ChapterRepository chapterRepository;
     private final ChapterCommentRepository chapterCommentRepository;
+    private final AuthorRepository authorRepository;
+    private final MangaAuthorRepository mangaAuthorRepository;
+    private final ViewMangaRepository viewMangaRepository;
+    private final ErrorReportStatusRepository errorReportStatusRepository;
+    private final ErrorTypeRepository errorTypeRepository;
+    private final OutLawAreaRepository outLawAreaRepository;
+    private final OutLawProcessStatusRepository outLawProcessStatusRepository;
+    private final OutLawTypeRepository outLawTypeRepository;
 
     @Bean
     CommandLineRunner initDatabase() {
         return new CommandLineRunner() {
             @Override
             public void run(String... args) throws Exception {
-                importData();
+//                importData();
                 System.out.println("Insert data successfully");
             }
         };
     }
 
     private void importData() throws Exception{
-//        importGenreData();
-//        importPrivacyPolicyData();
-//        importGenderData();
-//        importUserStatusData();
-//        importAgeRangeData();
-//        importUserData();
-//        importMangaStatusData();
-//        importMangaData();
-//        importGenreMangaData();
-//        importMangaCommentData();
-//        importChapterData();
-//        importChapterCommentData();
+        importGenreData();
+        importPrivacyPolicyData();
+        importGenderData();
+        importUserStatusData();
+        importAgeRangeData();
+        importUserData();
+        importMangaStatusData();
+        importMangaData();
+        importGenreMangaData();
+        importMangaCommentData();
+        importChapterData();
+        importChapterCommentData();
+        importAuthorData();
+        importMangaAuthorData();
+        importErrorReportStatusData();
+        importErrorTypeData();
+        importOutLawAreaData();
+        importOutLawProcessStatusData();
+        importOutLawTypeData();
     }
 
     private CSVReader buildCSVReader(String urlFile) throws Exception {
@@ -159,12 +176,22 @@ public class Database {
                 manga.setName(nextLine[0]);
                 manga.setOtherName(nextLine[1]);
                 manga.setDescription(nextLine[2]);
+                manga.setLastChapterUploadAt(new Date());
 
                 mangaArrayList.add(manga);
             }
         }
 
         mangaRepository.saveAll(mangaArrayList);
+
+        ArrayList<ViewManga> viewMangaArrayList = new ArrayList<>();
+
+        mangaArrayList.forEach(manga -> {
+            ViewManga viewManga = new ViewManga(0L, manga);
+            viewMangaArrayList.add(viewManga);
+        });
+
+        viewMangaRepository.saveAll(viewMangaArrayList);
     }
 
     private void importGenreMangaData() throws Exception {
@@ -172,23 +199,18 @@ public class Database {
 
         ArrayList<GenreManga> genreMangaArrayList = new ArrayList<>();
 
-        Long cursor = 1L;
-        Optional<Manga> manga = mangaRepository.findById(cursor);
-        ArrayList<Integer> genreIdArrayList = new ArrayList<>();
-
         String[] nextLine;
         while ((nextLine = csvReader.readNext()) != null) {
-            genreIdArrayList.add(Integer.parseInt(nextLine[0]));
-        }
+            Optional<Manga> foundManga = mangaRepository.findById(Long.parseLong(nextLine[1]));
 
-        genreRepository.findAllById(genreIdArrayList).forEach(genre -> {
-            genreMangaArrayList.add(
-                    new GenreManga(
-                            manga.get(),
-                            genre
-                    )
-            );
-        });
+            Optional<Genre> foundGenre = genreRepository.findById(Integer.parseInt(nextLine[0]));
+
+            if (foundManga.isPresent() && foundGenre.isPresent()) {
+                genreMangaArrayList.add(
+                        new GenreManga(foundManga.get(), foundGenre.get())
+                );
+            }
+        }
 
         genreMangaRepository.saveAll(genreMangaArrayList);
     }
@@ -246,23 +268,36 @@ public class Database {
 
     private void importMangaCommentData() throws Exception {
         CSVReader csvReader = buildCSVReader("manga-comment-seeder.csv");
+        ArrayList<MangaComment> mangaCommentArrayListTmp = new ArrayList<>();
         ArrayList<MangaComment> mangaCommentArrayList = new ArrayList<>();
+
         String[] nextLine;
+
+        List<Manga> mangaList = mangaRepository.findAll();
 
         while ((nextLine = csvReader.readNext()) != null) {
             Optional<User> foundUser = userRepository.findById(Long.parseLong(nextLine[2]));
-            Optional<Manga> foundManga = mangaRepository.findById(Long.parseLong(nextLine[1]));
 
-            if (foundUser.isPresent() && foundManga.isPresent()) {
+            if (foundUser.isPresent()) {
                 MangaComment mangaComment = new MangaComment();
 
                 mangaComment.setUser(foundUser.get());
-                mangaComment.setManga(foundManga.get());
                 mangaComment.setContent(nextLine[0]);
+
+                mangaCommentArrayListTmp.add(mangaComment);
+            }
+        }
+
+        mangaList.forEach(manga -> {
+            for (MangaComment mangaCommentTmp : mangaCommentArrayListTmp) {
+                MangaComment mangaComment = new MangaComment();
+                mangaComment.setContent(mangaCommentTmp.getContent());
+                mangaComment.setManga(manga);
+                mangaComment.setUser(mangaCommentTmp.getUser());
 
                 mangaCommentArrayList.add(mangaComment);
             }
-        }
+        });
 
         mangaCommentRepository.saveAll(mangaCommentArrayList);
     }
@@ -273,13 +308,13 @@ public class Database {
         String[] nextLine;
         while ((nextLine = csvReader.readNext()) != null) {
             Chapter chapter = new Chapter();
-            Optional<User> userUploaded = userRepository.findById(Long.parseLong(nextLine[1]));
-            Optional<Manga> foundManga = mangaRepository.findById(Long.parseLong(nextLine[2]));
+            Optional<User> userUploaded = userRepository.findById(Long.parseLong(nextLine[2]));
+            Optional<Manga> foundManga = mangaRepository.findById(Long.parseLong(nextLine[1]));
 
             if (userUploaded.isPresent() && foundManga.isPresent()) {
                 chapter.setName(nextLine[0]);
                 chapter.setManga(foundManga.get());
-                chapter.setUploadedBy(Long.parseLong(nextLine[1]));
+                chapter.setUploadedBy(Long.parseLong(nextLine[2]));
 
                 chapterArrayList.add(chapter);
             }
@@ -290,24 +325,135 @@ public class Database {
 
     private void importChapterCommentData() throws Exception {
         CSVReader csvReader = buildCSVReader("chapter-comment-seeder.csv");
+        ArrayList<ChapterComment> chapterCommentArrayListTmp = new ArrayList<>();
         ArrayList<ChapterComment> chapterCommentArrayList = new ArrayList<>();
+
+        List<Chapter> chapterList = chapterRepository.findAll();
 
         String[] nextLine;
 
         while ((nextLine = csvReader.readNext()) != null) {
             ChapterComment chapterComment = new ChapterComment();
 
-            Optional<User> foundUser = userRepository.findById(Long.parseLong(nextLine[2]));
-            Optional<Chapter> foundChapter = chapterRepository.findById(Long.parseLong(nextLine[1]));
+            Optional<User> foundUser = userRepository.findById(Long.parseLong(nextLine[1]));
 
-            if (foundUser.isPresent() && foundChapter.isPresent()) {
+            if (foundUser.isPresent()) {
                 chapterComment.setUser(foundUser.get());
-                chapterComment.setChapter(foundChapter.get());
                 chapterComment.setContent(nextLine[0]);
-                chapterCommentArrayList.add(chapterComment);
+                chapterCommentArrayListTmp.add(chapterComment);
             }
         }
 
+        chapterList.forEach(chapter -> {
+            for (ChapterComment chapterCommentTmp : chapterCommentArrayListTmp) {
+                ChapterComment chapterComment = new ChapterComment();
+                chapterComment.setContent(chapterCommentTmp.getContent());
+                chapterComment.setChapter(chapter);
+                chapterComment.setUser(chapterCommentTmp.getUser());
+                chapterCommentArrayList.add(chapterComment);
+            }
+        });
+
         chapterCommentRepository.saveAll(chapterCommentArrayList);
+    }
+
+    private void importAuthorData() throws Exception {
+        CSVReader csvReader = buildCSVReader("author-seeder.csv");
+        ArrayList<Author> authorArrayList = new ArrayList<>();
+
+        String[] nextLine;
+        while ((nextLine = csvReader.readNext()) != null) {
+            Author author = new Author();
+            author.setName(nextLine[0]);
+            authorArrayList.add(author);
+        }
+
+        authorRepository.saveAll(authorArrayList);
+    }
+
+    private void importMangaAuthorData() throws Exception {
+        CSVReader csvReader = buildCSVReader("manga-author-seeder.csv");
+        ArrayList<MangaAuthor> mangaAuthorArrayList = new ArrayList<>();
+        String[] nextLine;
+        while ((nextLine = csvReader.readNext()) != null) {
+            Optional<Manga> foundManga = mangaRepository.findById(Long.parseLong(nextLine[1]));
+            Optional<Author> foundAuthor = authorRepository.findById(Integer.parseInt(nextLine[0]));
+
+            if (foundManga.isPresent() && foundAuthor.isPresent()) {
+                MangaAuthor mangaAuthor = new MangaAuthor();
+                mangaAuthor.setAuthor(foundAuthor.get());
+                mangaAuthor.setManga(foundManga.get());
+
+                mangaAuthorArrayList.add(mangaAuthor);
+            }
+        }
+
+        mangaAuthorRepository.saveAll(mangaAuthorArrayList);
+    }
+
+    private void importErrorReportStatusData() throws Exception {
+        CSVReader csvReader = buildCSVReader("error-report-status-seeder.csv");
+        ArrayList<ErrorReportStatus> errorReportStatusArrayList = new ArrayList<>();
+        String[] nextLine;
+
+        while ((nextLine = csvReader.readNext()) != null) {
+            ErrorReportStatus errorReportStatus = new ErrorReportStatus();
+            errorReportStatus.setName(nextLine[0]);
+            errorReportStatusArrayList.add(errorReportStatus);
+        }
+
+        errorReportStatusRepository.saveAll(errorReportStatusArrayList);
+    }
+
+    private void importErrorTypeData() throws Exception {
+        CSVReader csvReader = buildCSVReader("error-type-seeder.csv");
+        ArrayList<ErrorType> errorTypeArrayList = new ArrayList<>();
+        String[] nextLine;
+        while ((nextLine = csvReader.readNext()) != null) {
+            ErrorType errorType = new ErrorType();
+            errorType.setName(nextLine[0]);
+            errorTypeArrayList.add(errorType);
+        }
+
+        errorTypeRepository.saveAll(errorTypeArrayList);
+    }
+
+    private void importOutLawAreaData() throws Exception {
+        CSVReader csvReader = buildCSVReader("out-law-area-seeder.csv");
+        ArrayList<OutLawArea> outLawAreaArrayList = new ArrayList<>();
+        String[] nextLine;
+        while ((nextLine = csvReader.readNext()) != null) {
+            OutLawArea outLawArea = new OutLawArea();
+            outLawArea.setName(nextLine[0]);
+            outLawAreaArrayList.add(outLawArea);
+        }
+
+        outLawAreaRepository.saveAll(outLawAreaArrayList);
+    }
+
+    private void importOutLawProcessStatusData() throws Exception {
+        CSVReader csvReader = buildCSVReader("out-law-process-status-seeder.csv");
+        ArrayList<OutLawProcessStatus> outLawProcessStatusArrayList = new ArrayList<>();
+        String[] nextLine;
+        while ((nextLine = csvReader.readNext()) != null) {
+            OutLawProcessStatus outLawProcessStatus = new OutLawProcessStatus();
+            outLawProcessStatus.setName(nextLine[0]);
+            outLawProcessStatusArrayList.add(outLawProcessStatus);
+        }
+
+        outLawProcessStatusRepository.saveAll(outLawProcessStatusArrayList);
+    }
+
+    private void importOutLawTypeData() throws Exception {
+        CSVReader csvReader = buildCSVReader("out-law-type-seeder.csv");
+        ArrayList<OutLawType> outLawTypeArrayList = new ArrayList<>();
+        String[] nextLine;
+        while ((nextLine = csvReader.readNext()) != null) {
+            OutLawType outLawType = new OutLawType();
+            outLawType.setName(nextLine[0]);
+            outLawTypeArrayList.add(outLawType);
+        }
+
+        outLawTypeRepository.saveAll(outLawTypeArrayList);
     }
 }

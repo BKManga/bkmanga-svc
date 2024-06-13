@@ -38,7 +38,7 @@ public class ChapterCommentServiceImpl implements ChapterCommentService {
     public ApiResponse<Page<ChapterComment>> getChapterCommentByMangaId(
             GetListChapterCommentRequestDTO getListChapterCommentRequestDTO
     ) throws CustomException {
-        Chapter chapter = getChapterValue(getListChapterCommentRequestDTO.getIdChapter());
+        Chapter chapter = getChapterValue(getListChapterCommentRequestDTO.getChapterId());
 
         Pageable pageable = PageRequest.of(
                 getListChapterCommentRequestDTO.getPage(),

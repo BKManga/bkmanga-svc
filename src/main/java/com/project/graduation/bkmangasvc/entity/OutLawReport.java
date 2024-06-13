@@ -19,20 +19,26 @@ public class OutLawReport {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long userReported;
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "user_report")
+    private User userReported;
 
     @Column()
     private Long commentReported;
 
-    @Column()
+    @Column(nullable = false, length = 512)
     private String description;
 
-    @Column(nullable = false)
-    private Long uploadedBy;
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "uploaded_by")
+    private User uploadedBy;
 
-    @Column(nullable = false)
-    private Long updatedBy;
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "updated_by")
+    private User updatedBy;
 
     @Column(
             insertable=false,

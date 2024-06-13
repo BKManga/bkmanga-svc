@@ -43,26 +43,6 @@ public class GenreServiceImpl implements GenreService {
         return ApiResponse.successWithResult(foundGenre);
     }
 
-    @Override
-    public ApiResponse<List<Manga>> getMangaListByGenreId(GetListMangaByGenreRequestDTO mangaListByGenreRequestDTO)
-            throws CustomException {
-        Genre foundGenre = getValueGenre(mangaListByGenreRequestDTO.getIdGenre());
-
-        Sort sortData = getSorting("manga_id", mangaListByGenreRequestDTO.getOrderBy());
-
-        Pageable pageable = PageRequest.of(
-                mangaListByGenreRequestDTO.getPage(),
-                mangaListByGenreRequestDTO.getSize(),
-                sortData
-        );
-
-        Page<GenreManga> genreMangaPage = genreMangaRepository.findGenreMangaByGenre(foundGenre, pageable);
-
-        List<Manga> listManga = genreMangaPage.get().map(GenreManga::getManga).collect(Collectors.toList());
-
-        return ApiResponse.successWithResult(listManga);
-    }
-
     private Genre getValueGenre(Integer id) throws CustomException {
         Optional<Genre> foundGenre = genreRepository.findById(id);
         if (foundGenre.isEmpty()) {
@@ -70,10 +50,5 @@ public class GenreServiceImpl implements GenreService {
         }
 
         return foundGenre.get();
-    }
-
-    private Sort getSorting(String sortField, String sortType) {
-        Sort.by(sortField);
-        return Sort.by(sortType);
     }
 }

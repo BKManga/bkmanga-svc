@@ -9,8 +9,11 @@ import lombok.Data;
 public class GetFollowRequestDTO {
 
     @NotNull
-    private Long mangaId;
+    private Long userId;
 
     @NotNull
-    private Long userId;
+    private Integer page;
+
+    @NotNull
+    private Integer size;
 }

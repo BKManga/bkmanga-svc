@@ -79,7 +79,6 @@ public class User {
     private List<MangaComment> mangaCommentList;
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
-    @JsonIgnore
     private Level level;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
@@ -89,4 +88,24 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Follow> followList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "uploadedBy", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<OutLawReport> uploadOutLawReportList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "updatedBy", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<OutLawReport> updatedOutLawReportList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "userReported", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<OutLawReport> reportOutLawReportList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "uploadedBy", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<ErrorChapterReport> uploadErrorChapterReportList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "updatedBy", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<ErrorChapterReport> updateErrorChapterReportList = new ArrayList<>();
 }

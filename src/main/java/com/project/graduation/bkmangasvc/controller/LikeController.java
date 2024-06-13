@@ -9,6 +9,7 @@ import com.project.graduation.bkmangasvc.exception.CustomException;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
 import com.project.graduation.bkmangasvc.service.LikeMangaService;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class LikeController {
 
     @PostMapping(path = "/get")
     public ApiResponse<GetLikeMangaResponseDTO> getLikeManga(
-            @RequestBody GetLikeMangaRequestDTO getLikeMangaRequestDTO
+            @Valid @RequestBody GetLikeMangaRequestDTO getLikeMangaRequestDTO
     ) throws CustomException {
         return likeMangaService.getLikeManga(getLikeMangaRequestDTO);
     }
@@ -29,7 +30,7 @@ public class LikeController {
     @PostMapping(path = "/create")
     @Transactional(rollbackOn = CustomException.class)
     public ApiResponse<CreateLikeMangaResponseDTO> createLikeManga(
-            @RequestBody CreateLikeMangaRequestDTO createLikeMangaRequestDTO
+            @Valid @RequestBody CreateLikeMangaRequestDTO createLikeMangaRequestDTO
     ) throws CustomException {
         return likeMangaService.createLikeManga(createLikeMangaRequestDTO);
     }
@@ -37,7 +38,7 @@ public class LikeController {
     @DeleteMapping(path = "/delete")
     @Transactional(rollbackOn = CustomException.class)
     public ApiResponse<?> deleteLikeManga(
-            @RequestBody DeleteLikeMangaRequestDTO deleteLikeMangaRequestDTO
+            @Valid @RequestBody DeleteLikeMangaRequestDTO deleteLikeMangaRequestDTO
     ) throws CustomException {
         return likeMangaService.deleteLikeManga(deleteLikeMangaRequestDTO);
     }

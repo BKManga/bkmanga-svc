@@ -23,4 +23,9 @@ public class ViewManga {
     @JsonIgnore
     @JoinColumn(name = "manga_id")
     private Manga manga;
+
+    public ViewManga(Long numberOfViews, Manga manga) {
+        this.numberOfViews = numberOfViews;
+        this.manga = manga;
+    }
 }

@@ -13,23 +13,29 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 @AllArgsConstructor
-public class ChapterReport {
+public class ErrorChapterReport {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long manga;
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "manga_id")
+    private Manga manga;
 
-    @Column()
+    @Column(nullable = false, length = 512)
     private String description;
 
-    @Column(nullable = false)
-    private Long uploadedBy;
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "uploaded_by")
+    private User uploadedBy;
 
-    @Column()
-    private Long updatedBy;
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "update_by")
+    private User updatedBy;
 
     @Column(
             insertable=false,

@@ -7,6 +7,7 @@ import com.project.graduation.bkmangasvc.dto.request.DeleteFollowRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.GetFollowRequestDTO;
 import com.project.graduation.bkmangasvc.dto.response.CreateFollowResponseDTO;
 import com.project.graduation.bkmangasvc.dto.response.GetFollowResponseDTO;
+import com.project.graduation.bkmangasvc.dto.response.GetMangaResponseDTO;
 import com.project.graduation.bkmangasvc.entity.*;
 import com.project.graduation.bkmangasvc.exception.CustomException;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
@@ -14,6 +15,9 @@ import com.project.graduation.bkmangasvc.repository.*;
 import com.project.graduation.bkmangasvc.service.FollowService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -28,17 +32,22 @@ public class FollowServiceImpl implements FollowService {
     private final ModelMapper modelMapper;
 
     @Override
-    public ApiResponse<GetFollowResponseDTO> getFollow(GetFollowRequestDTO getFollowRequestDTO) throws CustomException {
-        Manga manga = getMangaValue(getFollowRequestDTO.getMangaId());
+    public ApiResponse<Page<GetMangaResponseDTO>> getFollowByUser(
+            GetFollowRequestDTO getFollowRequestDTO
+    ) throws CustomException {
+
         User user = getUserValue(getFollowRequestDTO.getUserId());
 
-        Optional<Follow> follow = followRepository.findByMangaAndUser(manga, user);
+        Pageable pageable = PageRequest.of(
+                getFollowRequestDTO.getPage(),
+                getFollowRequestDTO.getSize()
+        );
 
-        if (follow.isPresent()) {
-            return ApiResponse.successWithResult(modelMapper.map(follow.get(), GetFollowResponseDTO.class));
-        }
+        Page<Follow> followListPage = followRepository.findByUserOrderByCreatedAtDesc(user, pageable);
 
-        return ApiResponse.successWithResult(null);
+        Page<GetMangaResponseDTO> mangaResponseDTOPage = getPageMangaResponseDTO(followListPage);
+
+        return ApiResponse.successWithResult(mangaResponseDTOPage);
     }
 
     @Override
@@ -101,5 +110,17 @@ public class FollowServiceImpl implements FollowService {
         }
 
         return foundManga.get();
+    }
+
+    private Page<GetMangaResponseDTO> getPageMangaResponseDTO (Page<Follow> followPage) {
+        return followPage.map(follow -> getMangaResponseDTO(follow.getManga()));
+    }
+
+    private GetMangaResponseDTO getMangaResponseDTO (Manga manga) {
+        GetMangaResponseDTO getMangaResponseDTO = modelMapper.map(manga, GetMangaResponseDTO.class);
+        getMangaResponseDTO.setNumberOfFollow(manga.getFollowList().size());
+        getMangaResponseDTO.setNumberOfLikes(manga.getLikeMangaList().size());
+
+        return getMangaResponseDTO;
     }
 }

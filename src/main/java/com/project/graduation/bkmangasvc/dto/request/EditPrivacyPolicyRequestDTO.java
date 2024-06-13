@@ -8,6 +8,10 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class EditPrivacyPolicyRequestDTO {
+
+    @NotNull
+    private Integer id;
+
     @NotNull
     @NotBlank
     private String question;

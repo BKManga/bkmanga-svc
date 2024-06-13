@@ -11,7 +11,6 @@ public interface PrivacyPolicyService {
     ApiResponse<List<PrivacyPolicy>> getPrivacyPolicy();
 
     ApiResponse<PrivacyPolicy> editPrivacyPolicy(
-            EditPrivacyPolicyRequestDTO privacyPolicyEditRequestDTO,
-            Integer id
+            EditPrivacyPolicyRequestDTO privacyPolicyEditRequestDTO
     ) throws CustomException;
 }

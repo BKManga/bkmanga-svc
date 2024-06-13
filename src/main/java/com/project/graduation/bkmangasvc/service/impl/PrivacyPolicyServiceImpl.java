@@ -28,16 +28,10 @@ public class PrivacyPolicyServiceImpl implements PrivacyPolicyService {
 
     @Override
     public ApiResponse<PrivacyPolicy> editPrivacyPolicy(
-            EditPrivacyPolicyRequestDTO privacyPolicyEditRequestDTO,
-            Integer id
+            EditPrivacyPolicyRequestDTO privacyPolicyEditRequestDTO
     ) throws CustomException{
-        Optional<PrivacyPolicy> foundPrivacyPolicy = privacyPolicyRepository.findById(id);
 
-        if (foundPrivacyPolicy.isEmpty()) {
-            throw new CustomException(ErrorCode.RECORD_NOT_EXIST);
-        }
-
-        PrivacyPolicy privacyPolicy = foundPrivacyPolicy.get();
+        PrivacyPolicy privacyPolicy = getPrivacyPolicyValue(privacyPolicyEditRequestDTO.getId());
 
         privacyPolicy.setQuestion(privacyPolicyEditRequestDTO.getQuestion());
         privacyPolicy.setAnswer(privacyPolicyEditRequestDTO.getAnswer());
@@ -46,5 +40,15 @@ public class PrivacyPolicyServiceImpl implements PrivacyPolicyService {
         privacyPolicyRepository.save(privacyPolicy);
 
         return ApiResponse.successWithResult(privacyPolicy);
+    }
+
+    private PrivacyPolicy getPrivacyPolicyValue(Integer id) throws CustomException{
+        Optional<PrivacyPolicy> foundPrivacyPolicy = privacyPolicyRepository.findById(id);
+
+        if (foundPrivacyPolicy.isEmpty()) {
+            throw new CustomException(ErrorCode.RECORD_NOT_EXIST);
+        }
+
+        return foundPrivacyPolicy.get();
     }
 }

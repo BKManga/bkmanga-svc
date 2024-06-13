@@ -13,9 +13,6 @@ public interface GenreService {
 
     ApiResponse<Genre> getGenreById(Integer id) throws CustomException;
 
-    ApiResponse<List<Manga>> getMangaListByGenreId(GetListMangaByGenreRequestDTO mangaListByGenreRequestDTO)
-            throws CustomException;
-
 //    ApiResponse<Genre> createGenre(Genre genre) throws CustomException;
 //
 //    ApiResponse<Genre> updateGenre(Genre genre) throws CustomException;

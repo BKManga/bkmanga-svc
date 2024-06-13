@@ -8,6 +8,7 @@ import com.project.graduation.bkmangasvc.exception.CustomException;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
 import com.project.graduation.bkmangasvc.service.HistoryService;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public class HistoryController {
 
     @PostMapping(path = "/all")
     public ApiResponse<GetListHistoryResponseDTO> getAllHistoryByUser(
-            GetListHistoryRequestDTO getListHistoryRequestDTO
+            @Valid @RequestBody GetListHistoryRequestDTO getListHistoryRequestDTO
     ) throws CustomException {
         return historyService.getAllHistoryByUser(getListHistoryRequestDTO);
     }
@@ -28,7 +29,7 @@ public class HistoryController {
     @PostMapping(path = "/createOrUpdate")
     @Transactional(rollbackOn = CustomException.class)
     public ApiResponse<?> createOrEditHistory(
-            CreateOrEditHistoryRequestDTO createOrEditHistoryRequestDTO
+            @Valid @RequestBody CreateOrEditHistoryRequestDTO createOrEditHistoryRequestDTO
     ) throws CustomException {
         return historyService.createOrEditHistory(createOrEditHistoryRequestDTO);
     }
@@ -36,7 +37,7 @@ public class HistoryController {
     @DeleteMapping(path = "/delete")
     @Transactional(rollbackOn = CustomException.class)
     public ApiResponse<?> deleteHistory(
-            DeleteHistoryRequestDTO deleteHistoryRequestDTO
+            @Valid @RequestBody DeleteHistoryRequestDTO deleteHistoryRequestDTO
     ) throws CustomException {
         return historyService.deleteHistory(deleteHistoryRequestDTO);
     }

@@ -6,6 +6,7 @@ import com.project.graduation.bkmangasvc.dto.request.CreateOrEditHistoryRequestD
 import com.project.graduation.bkmangasvc.dto.request.DeleteHistoryRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.GetListHistoryRequestDTO;
 import com.project.graduation.bkmangasvc.dto.response.GetListHistoryResponseDTO;
+import com.project.graduation.bkmangasvc.dto.response.GetMangaResponseDTO;
 import com.project.graduation.bkmangasvc.entity.*;
 import com.project.graduation.bkmangasvc.exception.CustomException;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
@@ -13,6 +14,7 @@ import com.project.graduation.bkmangasvc.model.HistoryResponse;
 import com.project.graduation.bkmangasvc.repository.*;
 import com.project.graduation.bkmangasvc.service.HistoryService;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -26,6 +28,7 @@ public class HistoryServiceImpl implements HistoryService {
     private final UserRepository userRepository;
     private final MangaRepository mangaRepository;
     private final ChapterRepository chapterRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public ApiResponse<GetListHistoryResponseDTO> getAllHistoryByUser(
@@ -133,9 +136,13 @@ public class HistoryServiceImpl implements HistoryService {
             if (foundManga != null) {
                 Chapter foundChapter = chapterMap.get(history.getChapter());
                 if (foundChapter != null) {
+                    GetMangaResponseDTO getMangaResponseDTO = modelMapper.map(foundManga, GetMangaResponseDTO.class);
+                    getMangaResponseDTO.setNumberOfLikes(foundManga.getLikeMangaList().size());
+                    getMangaResponseDTO.setNumberOfFollow(foundManga.getFollowList().size());
+
                     historyResponseList.add(new HistoryResponse(
                             history.getId(),
-                            foundManga,
+                            getMangaResponseDTO,
                             foundChapter
                     ));
                 }

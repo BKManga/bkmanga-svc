@@ -50,8 +50,15 @@ public class Manga {
     )
     private Date updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
+    @Column(
+            insertable=false,
+            updatable=false,
+            columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
+    )
+    private Date lastChapterUploadAt;
+
+    @ManyToOne()
     @JoinColumn(name = "manga_status_id")
     private MangaStatus mangaStatus;
 
@@ -66,9 +73,10 @@ public class Manga {
 
     @OneToMany(mappedBy = "manga", fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<MangaComment> manwgaCommentList = new ArrayList<>();
+    private List<MangaComment> mangaCommentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "manga", fetch = FetchType.LAZY)
+    @OrderBy("updatedAt DESC")
     private List<Chapter> chapterList = new ArrayList<>();
 
     @OneToMany(mappedBy = "manga", fetch = FetchType.LAZY)
@@ -78,7 +86,6 @@ public class Manga {
     private List<Follow> followList = new ArrayList<>();
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "age_range_id")
     private AgeRange ageRange;
 

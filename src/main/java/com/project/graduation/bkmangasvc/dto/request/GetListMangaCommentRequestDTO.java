@@ -9,7 +9,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class GetListMangaCommentRequestDTO {
     @NotNull
-    Long idManga;
+    Long mangaId;
 
     @NotNull
     Integer page;

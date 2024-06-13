@@ -55,5 +55,5 @@ public class Chapter {
 
     @OneToMany(mappedBy = "chapter", fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<ChapterReport> chapterReportList = new ArrayList<>();
+    private List<ErrorChapterReport> chapterReportList = new ArrayList<>();
 }

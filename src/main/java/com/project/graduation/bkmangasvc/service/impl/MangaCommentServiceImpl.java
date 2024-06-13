@@ -44,7 +44,7 @@ public class MangaCommentServiceImpl implements MangaCommentService {
     )
         throws CustomException
     {
-        Manga foundManga = getMangaValue(mangaCommentListRequestDTO.getIdManga());
+        Manga foundManga = getMangaValue(mangaCommentListRequestDTO.getMangaId());
 
         Pageable pageable = PageRequest.of(
                 mangaCommentListRequestDTO.getPage(),

@@ -16,7 +16,8 @@ public enum ErrorCode {
     MANGA_NOT_EXIST("MANGA_NOT_EXIST", "Truyện không tồn tại"),
     CHAPTER_NOT_EXIST("CHAPTER_NOT_EXIST", "Chương truyện không tồn tại"),
     CHAPTER_COMMENT_NOT_EXIST("CHAPTER_COMMENT_NOT_EXIST", "Comment này không tồn tại"),
-    MANGA_COMMENT_NOT_EXIST("MANGA_COMMENT_NOT_EXIST", "Comment này không tồn tại");
+    MANGA_COMMENT_NOT_EXIST("MANGA_COMMENT_NOT_EXIST", "Comment này không tồn tại"),
+    AUTHOR_NOT_EXIST("AUTHOR_NOT_EXIST", "Tác giả không tồn tại");
 
     private final String code;
 
