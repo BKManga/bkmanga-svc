@@ -22,6 +22,10 @@ public class Author {
     @Column(nullable = false)
     private String name;
 
+    public Author(String name) {
+        this.name = name;
+    }
+
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<MangaAuthor> mangaAuthorList = new ArrayList<>();

@@ -1,7 +1,5 @@
 package com.project.graduation.bkmangasvc.config;
 
-import lombok.NoArgsConstructor;
-
 public class Setting {
     private Setting() {
     }

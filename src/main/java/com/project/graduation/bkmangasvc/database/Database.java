@@ -166,13 +166,14 @@ public class Database {
 
             Optional<MangaStatus> foundMangaStatus = mangaStatusRepository.findById(mangaStatusId);
             Optional<AgeRange> foundAgeRange = ageRangeRepository.findById(ageRangeId);
+            Optional<User> foundUser = userRepository.findById(updatedBy);
 
             Manga manga = new Manga();
 
-            if (foundMangaStatus.isPresent() && foundAgeRange.isPresent()) {
+            if (foundMangaStatus.isPresent() && foundAgeRange.isPresent() && foundUser.isPresent()) {
                 manga.setAgeRange(foundAgeRange.get());
                 manga.setMangaStatus(foundMangaStatus.get());
-                manga.setUpdatedBy(updatedBy);
+                manga.setUpdatedBy(foundUser.get());
                 manga.setName(nextLine[0]);
                 manga.setOtherName(nextLine[1]);
                 manga.setDescription(nextLine[2]);
@@ -314,7 +315,7 @@ public class Database {
             if (userUploaded.isPresent() && foundManga.isPresent()) {
                 chapter.setName(nextLine[0]);
                 chapter.setManga(foundManga.get());
-                chapter.setUploadedBy(Long.parseLong(nextLine[2]));
+                chapter.setUploadedBy(userUploaded.get());
 
                 chapterArrayList.add(chapter);
             }

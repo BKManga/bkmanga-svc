@@ -35,7 +35,6 @@ public class OutLawReportController {
         return outLawReportService.getOutLawReportById(getOutLawReportByIdRequestDTO);
     }
 
-
     @PostMapping("/create")
     @Transactional(rollbackOn = CustomException.class)
     public ApiResponse<OutLawReport> createOutLawReport(
@@ -44,8 +43,7 @@ public class OutLawReportController {
         return outLawReportService.createOutLawReport(createOutLawReportRequestDTO);
     }
 
-
-    @PostMapping(path = "/update")
+    @PutMapping(path = "/update")
     @Transactional(rollbackOn = CustomException.class)
     public ApiResponse<OutLawReport> updateOutLawReport(
             @Valid @RequestBody UpdateOutLawReportRequestDTO updateOutLawReportRequestDTO

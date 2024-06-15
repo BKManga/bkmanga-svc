@@ -17,7 +17,11 @@ public enum ErrorCode {
     CHAPTER_NOT_EXIST("CHAPTER_NOT_EXIST", "Chương truyện không tồn tại"),
     CHAPTER_COMMENT_NOT_EXIST("CHAPTER_COMMENT_NOT_EXIST", "Comment này không tồn tại"),
     MANGA_COMMENT_NOT_EXIST("MANGA_COMMENT_NOT_EXIST", "Comment này không tồn tại"),
-    AUTHOR_NOT_EXIST("AUTHOR_NOT_EXIST", "Tác giả không tồn tại");
+    AUTHOR_NOT_EXIST("AUTHOR_NOT_EXIST", "Tác giả không tồn tại"),
+    AUTHOR_EXISTED("AUTHOR_EXISTED", "Tác giả đã tồn tại"),
+    AUTHOR_NAME_EXISTED("AUTHOR_NAME_EXISTED", "Tên tác giả đã tồn tại"),
+    GENRE_EXISTED("GENRE_EXISTED", "Thể loại truyện đã tồn tại"),
+    GENRE_NAME_EXISTED("GENRE_NAME_EXISTED", "Tên thể loại truyện đã tồn tại");
 
     private final String code;
 

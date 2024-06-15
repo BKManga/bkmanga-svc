@@ -30,8 +30,10 @@ public class Manga {
     @Column(nullable = false, length = 512)
     private String description;
 
-    @Column(nullable = false)
-    private Long updatedBy;
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(nullable = false, name = "updated_by")
+    private User updatedBy;
 
     @Column(
             insertable=false,
@@ -88,20 +90,4 @@ public class Manga {
     @ManyToOne
     @JoinColumn(name = "age_range_id")
     private AgeRange ageRange;
-
-    public Manga(
-            String name,
-            String otherName,
-            String description,
-            Long updatedBy,
-            MangaStatus mangaStatus,
-            AgeRange ageRange
-    ) {
-        this.name = name;
-        this.otherName = otherName;
-        this.description = description;
-        this.updatedBy = updatedBy;
-        this.mangaStatus = mangaStatus;
-        this.ageRange = ageRange;
-    }
 }

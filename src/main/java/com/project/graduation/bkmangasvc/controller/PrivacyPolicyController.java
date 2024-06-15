@@ -1,6 +1,6 @@
 package com.project.graduation.bkmangasvc.controller;
 
-import com.project.graduation.bkmangasvc.dto.request.EditPrivacyPolicyRequestDTO;
+import com.project.graduation.bkmangasvc.dto.request.UpdatePrivacyPolicyRequestDTO;
 import com.project.graduation.bkmangasvc.entity.PrivacyPolicy;
 import com.project.graduation.bkmangasvc.exception.CustomException;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
@@ -25,11 +25,11 @@ public class PrivacyPolicyController {
     }
 
 //    @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping("/edit")
+    @PutMapping("/update")
     @Transactional(rollbackOn = {CustomException.class})
-    public ApiResponse<PrivacyPolicy> editPrivacyPolicy(
-            @Valid @RequestBody EditPrivacyPolicyRequestDTO privacyPolicyEditRequestDTO
+    public ApiResponse<PrivacyPolicy> updatePrivacyPolicy(
+            @Valid @RequestBody UpdatePrivacyPolicyRequestDTO privacyPolicyEditRequestDTO
     ) throws CustomException {
-        return privacyPolicyService.editPrivacyPolicy(privacyPolicyEditRequestDTO);
+        return privacyPolicyService.updatePrivacyPolicy(privacyPolicyEditRequestDTO);
     }
 }

@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.*;
 public class HistoryController {
     private final HistoryService historyService;
 
-    @PostMapping(path = "/all")
-    public ApiResponse<GetListHistoryResponseDTO> getAllHistoryByUser(
+    @PostMapping(path = "/get")
+    public ApiResponse<GetListHistoryResponseDTO> getListHistoryByUser(
             @Valid @RequestBody GetListHistoryRequestDTO getListHistoryRequestDTO
     ) throws CustomException {
         return historyService.getAllHistoryByUser(getListHistoryRequestDTO);

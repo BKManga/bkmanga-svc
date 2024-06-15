@@ -2,10 +2,12 @@ package com.project.graduation.bkmangasvc.controller;
 
 import com.project.graduation.bkmangasvc.dto.request.*;
 import com.project.graduation.bkmangasvc.dto.response.GetMangaResponseDTO;
+import com.project.graduation.bkmangasvc.dto.response.GetMangaTopResponseDTO;
 import com.project.graduation.bkmangasvc.entity.Manga;
 import com.project.graduation.bkmangasvc.exception.CustomException;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
 import com.project.graduation.bkmangasvc.service.MangaService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,12 +22,10 @@ import java.util.List;
 public class MangaController {
     private final MangaService mangaService;
 
-//    @PostMapping(path = "/get")
-//    public ApiResponse<Page<Manga>> getManga(
-//            @RequestBody GetMangaRequestDTO getMangaRequestDTO
-//    ) {
-//        return null;
-//    }
+    @GetMapping(path = "/get/top")
+    public ApiResponse<List<GetMangaTopResponseDTO>> getTopManga() {
+        return mangaService.getListTopManga();
+    }
 
     @PostMapping(path = "/get/lastUpload")
     public ApiResponse<Page<GetMangaResponseDTO>> getMangaListByLastUploadChapter(
@@ -67,5 +67,21 @@ public class MangaController {
             @Valid @RequestBody GetMangaByFilterRequestDTO getMangaByFilterRequestDTO
     ) throws CustomException {
         return mangaService.searchMangaByFilter(getMangaByFilterRequestDTO);
+    }
+
+    @PostMapping(path = "/create")
+    @Transactional(rollbackOn = CustomException.class)
+    public ApiResponse<Manga> createManga(
+            @Valid @RequestBody CreateMangaRequestDTO createMangaRequestDTO
+    ) throws CustomException {
+        return mangaService.createManga(createMangaRequestDTO);
+    }
+
+    @PutMapping(path = "/update")
+    @Transactional(rollbackOn = CustomException.class)
+    public ApiResponse<Manga> updateManga(
+            @Valid @RequestBody UpdateMangaRequestDTO updateMangaRequestDTO
+    ) throws CustomException {
+        return null;
     }
 }

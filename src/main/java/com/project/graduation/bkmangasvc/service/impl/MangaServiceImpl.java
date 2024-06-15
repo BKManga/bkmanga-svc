@@ -1,9 +1,12 @@
 package com.project.graduation.bkmangasvc.service.impl;
 
 import com.project.graduation.bkmangasvc.constant.ErrorCode;
+import com.project.graduation.bkmangasvc.constant.MangaStatusEnum;
 import com.project.graduation.bkmangasvc.constant.SortingOrderBy;
+import com.project.graduation.bkmangasvc.constant.UserStatusEnum;
 import com.project.graduation.bkmangasvc.dto.request.*;
 import com.project.graduation.bkmangasvc.dto.response.GetMangaResponseDTO;
+import com.project.graduation.bkmangasvc.dto.response.GetMangaTopResponseDTO;
 import com.project.graduation.bkmangasvc.entity.*;
 import com.project.graduation.bkmangasvc.exception.CustomException;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
@@ -15,6 +18,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +31,26 @@ public class MangaServiceImpl implements MangaService {
     private final MangaStatusRepository mangaStatusRepository;
     private final AuthorRepository authorRepository;
     private final ModelMapper modelMapper;
+    private final ViewMangaRepository viewMangaRepository;
+    private final MangaAuthorRepository mangaAuthorRepository;
+    private final AgeRangeRepository ageRangeRepository;
+    private final UserStatusRepository userStatusRepository;
+    private final UserRepository userRepository;
+    private final ChapterRepository chapterRepository;
+
+    @Override
+    public ApiResponse<List<GetMangaTopResponseDTO>> getListTopManga() {
+        Pageable pageable = PageRequest.of(0 , 5);
+
+        List<ViewManga> viewMangaList = viewMangaRepository.findByOrderByNumberOfViewsDesc(pageable);
+
+        List<GetMangaTopResponseDTO> mangaTopResponseDTOList = viewMangaList
+                .stream()
+                .map(viewManga -> getMangaTopResponseDTO(viewManga.getManga()))
+                .toList();
+
+        return ApiResponse.successWithResult(mangaTopResponseDTOList);
+    }
 
     @Override
     public ApiResponse<Page<GetMangaResponseDTO>> getMangaListByLastUploadChapter(
@@ -160,6 +184,66 @@ public class MangaServiceImpl implements MangaService {
         return ApiResponse.successWithResult(getMangaResponseDTOPage);
     }
 
+    @Override
+    public ApiResponse<Manga> createManga(CreateMangaRequestDTO createMangaRequestDTO) throws CustomException {
+        List<Author> authorList = authorRepository.findByIdIn(createMangaRequestDTO.getListAuthorId());
+        List<Genre> genreList = genreRepository.findByIdIn(createMangaRequestDTO.getListGenreId());
+        User userUpdate = getUserValue(createMangaRequestDTO.getUpdatedById());
+
+        Manga manga = new Manga();
+
+        MangaStatus mangaStatus = getMangaStatus(MangaStatusEnum.IN_PROCESS.getStatus());
+        AgeRange ageRange = getAgeRangeValue(createMangaRequestDTO.getAgeRangeId());
+
+        manga.setName(createMangaRequestDTO.getName());
+        manga.setOtherName(createMangaRequestDTO.getOtherName());
+        manga.setDescription(createMangaRequestDTO.getDescription());
+        manga.setMangaStatus(mangaStatus);
+        manga.setAgeRange(ageRange);
+        manga.setUpdatedBy(userUpdate);
+        manga.setLastChapterUploadAt(new Date());
+
+        mangaRepository.save(manga);
+
+        List<MangaAuthor> mangaAuthorList = new ArrayList<>();
+        List<GenreManga> mangaGenreList = new ArrayList<>();
+
+        for (Author author : authorList) {
+            mangaAuthorList.add(new MangaAuthor(author, manga));
+        }
+
+        for (Genre genre : genreList) {
+            mangaGenreList.add(new GenreManga(manga, genre));
+        }
+
+        mangaAuthorRepository.saveAll(mangaAuthorList);
+        genreMangaRepository.saveAll(mangaGenreList);
+
+        Chapter chapter = new Chapter();
+        chapter.setManga(manga);
+        chapter.setUploadedBy(userUpdate);
+        chapter.setName(createMangaRequestDTO.getFirstChapterName());
+
+        chapterRepository.save(chapter);
+
+        ViewManga viewManga = new ViewManga(0L, manga);
+
+        viewMangaRepository.save(viewManga);
+
+        return ApiResponse.successWithResult(manga);
+    }
+
+    @Override
+    public ApiResponse<Manga> updateManga(UpdateMangaRequestDTO updateMangaRequestDTO) throws CustomException {
+
+        Manga manga = getMangaValue(updateMangaRequestDTO.getMangaId());
+        User userUpdate = getUserValue(updateMangaRequestDTO.getUpdatedById());
+        MangaStatus mangaStatus = getMangaStatus(updateMangaRequestDTO.getMangaStatusId());
+        AgeRange ageRange = getAgeRangeValue(updateMangaRequestDTO.getAgeRangeId());
+
+        return null;
+    }
+
     private Genre getGenreValue(Integer genreId) throws CustomException {
         Optional<Genre> foundGenre = genreRepository.findById(genreId);
 
@@ -249,11 +333,50 @@ public class MangaServiceImpl implements MangaService {
         return mangaPage.map(this::getMangaResponseDTO);
     }
 
+    private GetMangaTopResponseDTO getMangaTopResponseDTO (Manga manga) {
+        GetMangaTopResponseDTO getMangaTopResponseDTO = modelMapper.map(manga, GetMangaTopResponseDTO.class);
+        getMangaTopResponseDTO.setNumberOfFollow(manga.getFollowList().size());
+        getMangaTopResponseDTO.setNumberOfLikes(manga.getLikeMangaList().size());
+
+        Optional<Chapter> lastChapter = manga.getChapterList().stream().findFirst();
+
+        lastChapter.ifPresent(getMangaTopResponseDTO::setLastChapter);
+
+        return getMangaTopResponseDTO;
+    }
+
     private GetMangaResponseDTO getMangaResponseDTO (Manga manga) {
         GetMangaResponseDTO getMangaResponseDTO = modelMapper.map(manga, GetMangaResponseDTO.class);
         getMangaResponseDTO.setNumberOfFollow(manga.getFollowList().size());
         getMangaResponseDTO.setNumberOfLikes(manga.getLikeMangaList().size());
 
         return getMangaResponseDTO;
+    }
+
+    private AgeRange getAgeRangeValue(Integer ageRangeId) throws CustomException {
+        Optional<AgeRange> foundAgeRange = ageRangeRepository.findById(ageRangeId);
+
+        if (foundAgeRange.isEmpty()) {
+            throw new CustomException(ErrorCode.UNKNOWN_ERROR);
+        }
+
+        return foundAgeRange.get();
+    }
+
+    private User getUserValue(Long userId) throws CustomException{
+
+        Optional<UserStatus> userStatus = userStatusRepository.findById(UserStatusEnum.ACTIVE.getCode());
+
+        if (userStatus.isEmpty()) {
+            throw new CustomException(ErrorCode.UNKNOWN_ERROR);
+        }
+
+        Optional<User> foundUser = userRepository.findByIdAndUserStatus(userId, userStatus.get());
+
+        if (foundUser.isEmpty()) {
+            throw new CustomException(ErrorCode.USER_NOT_EXIST);
+        }
+
+        return foundUser.get();
     }
 }

@@ -43,7 +43,7 @@ public class ErrorChapterReportController {
         return errorChapterReportService.createErrorChapterReport(createErrorChapterReportRequestDTO);
     }
 
-    @PostMapping(path = "/update")
+    @PutMapping(path = "/update")
     @Transactional(rollbackOn = CustomException.class)
     public ApiResponse<ErrorChapterReport> updateChapterReport(
             @Valid @RequestBody UpdateErrorChapterReportRequestDTO updateErrorChapterReportRequestDTO

@@ -24,4 +24,9 @@ public class MangaAuthor {
     @JsonIgnore
     @JoinColumn(name = "manga_id")
     private Manga manga;
+
+    public MangaAuthor(Author author, Manga manga) {
+        this.author = author;
+        this.manga = manga;
+    }
 }

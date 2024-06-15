@@ -24,9 +24,10 @@ public class Chapter {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @ManyToOne
     @JsonIgnore
-    private Long uploadedBy;
+    @JoinColumn(nullable = false, name = "uploaded_by")
+    private User uploadedBy;
 
     @Column(
             insertable=false,

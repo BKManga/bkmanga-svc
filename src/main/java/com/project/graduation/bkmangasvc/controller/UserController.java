@@ -1,12 +1,13 @@
 package com.project.graduation.bkmangasvc.controller;
 
-import com.project.graduation.bkmangasvc.dto.request.ChangeStatusUserRequestDTO;
+import com.project.graduation.bkmangasvc.dto.request.UpdateStatusUserRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.GetUserListRequestDTO;
 import com.project.graduation.bkmangasvc.entity.User;
 import com.project.graduation.bkmangasvc.exception.CustomException;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
 import com.project.graduation.bkmangasvc.service.UserService;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -20,16 +21,24 @@ public class UserController {
 
     @PostMapping(path = "/get")
     public ApiResponse<Page<User>> getUserList(
-            @RequestBody GetUserListRequestDTO getUserListRequestDTO
+            @Valid @RequestBody GetUserListRequestDTO getUserListRequestDTO
     ) {
         return userService.getUserList(getUserListRequestDTO);
     }
 
-    @PutMapping(path = "/changeStatus")
+    @PutMapping(path = "/update/status")
     @Transactional(rollbackOn = CustomException.class)
-    public ApiResponse<User> changeStatusUser(
-            @RequestBody ChangeStatusUserRequestDTO changeStatusUserRequestDTO
+    public ApiResponse<User> updateStatusUser(
+            @Valid @RequestBody UpdateStatusUserRequestDTO updateStatusUserRequestDTO
     ) throws CustomException{
-        return userService.changeStatusUser(changeStatusUserRequestDTO);
+        return userService.updateStatusUser(updateStatusUserRequestDTO);
+    }
+
+    @PutMapping(path = "/update/info")
+    @Transactional(rollbackOn = CustomException.class)
+    public ApiResponse<User> updateInfoUser(
+
+    ) throws CustomException {
+        return null;
     }
 }

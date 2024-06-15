@@ -28,4 +28,5 @@ public class ViewManga {
         this.numberOfViews = numberOfViews;
         this.manga = manga;
     }
+
 }

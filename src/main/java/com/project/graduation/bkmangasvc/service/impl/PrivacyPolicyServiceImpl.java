@@ -1,7 +1,7 @@
 package com.project.graduation.bkmangasvc.service.impl;
 
 import com.project.graduation.bkmangasvc.constant.ErrorCode;
-import com.project.graduation.bkmangasvc.dto.request.EditPrivacyPolicyRequestDTO;
+import com.project.graduation.bkmangasvc.dto.request.UpdatePrivacyPolicyRequestDTO;
 import com.project.graduation.bkmangasvc.entity.PrivacyPolicy;
 import com.project.graduation.bkmangasvc.exception.CustomException;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
@@ -27,8 +27,8 @@ public class PrivacyPolicyServiceImpl implements PrivacyPolicyService {
     }
 
     @Override
-    public ApiResponse<PrivacyPolicy> editPrivacyPolicy(
-            EditPrivacyPolicyRequestDTO privacyPolicyEditRequestDTO
+    public ApiResponse<PrivacyPolicy> updatePrivacyPolicy(
+            UpdatePrivacyPolicyRequestDTO privacyPolicyEditRequestDTO
     ) throws CustomException{
 
         PrivacyPolicy privacyPolicy = getPrivacyPolicyValue(privacyPolicyEditRequestDTO.getId());

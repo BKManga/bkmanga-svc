@@ -8,7 +8,8 @@ import lombok.Getter;
 public enum OutLawProcessStatusEnum {
     NEW(1, "new"),
     IN_PROCESS(2, "in process"),
-    RESOLVED(3, "resolved");
+    RESOLVED(3, "resolved"),
+    REJECTED(4, "rejected");
 
     private final Integer code;
 

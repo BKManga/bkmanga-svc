@@ -1,7 +1,6 @@
 package com.project.graduation.bkmangasvc.dto.response;
 
 import com.project.graduation.bkmangasvc.entity.*;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,17 +11,16 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
-public class GetMangaResponseDTO {
-
+public class GetMangaTopResponseDTO {
     private Long id;
 
     private String name;
 
     private String otherName;
-    
+
     private String description;
 
-    private User updatedBy;
+    private Long updatedBy;
 
     private MangaStatus mangaStatus;
 
@@ -32,8 +30,8 @@ public class GetMangaResponseDTO {
 
     private List<MangaAuthor> mangaAuthorList = new ArrayList<>();
 
-    private List<Chapter> chapterList = new ArrayList<>();
-    
+    private Chapter lastChapter;
+
     private Integer numberOfFollow;
 
     private Integer numberOfLikes;

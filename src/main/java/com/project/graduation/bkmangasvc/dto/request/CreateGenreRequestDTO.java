@@ -4,22 +4,18 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
-public class EditPrivacyPolicyRequestDTO {
-
-    @NotNull
-    private Integer id;
-
-    @NotNull
-    @NotBlank
-    private String question;
+@Data
+@NoArgsConstructor
+public class CreateGenreRequestDTO {
 
     @NotNull
     @NotBlank
-    private String answer;
+    private String name;
 
     @NotNull
-    private Long updatedBy;
+    @NotBlank
+    private String description;
 }

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
-public class ChangeStatusUserRequestDTO {
+public class UpdateStatusUserRequestDTO {
 
     @NotNull
     private Long userId;

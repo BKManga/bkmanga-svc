@@ -1,7 +1,7 @@
 package com.project.graduation.bkmangasvc.service.impl;
 
 import com.project.graduation.bkmangasvc.constant.ErrorCode;
-import com.project.graduation.bkmangasvc.dto.request.ChangeStatusUserRequestDTO;
+import com.project.graduation.bkmangasvc.dto.request.UpdateStatusUserRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.GetUserListRequestDTO;
 import com.project.graduation.bkmangasvc.entity.User;
 import com.project.graduation.bkmangasvc.entity.UserStatus;
@@ -57,13 +57,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public ApiResponse<User> changeStatusUser(
-            ChangeStatusUserRequestDTO changeStatusUserRequestDTO
+    public ApiResponse<User> updateStatusUser(
+            UpdateStatusUserRequestDTO updateStatusUserRequestDTO
     ) throws CustomException {
 
-        User user = getUserValue(changeStatusUserRequestDTO.getUserId());
+        User user = getUserValue(updateStatusUserRequestDTO.getUserId());
 
-        UserStatus userStatus = getUserStatusValue(changeStatusUserRequestDTO.getUserStatusId());
+        UserStatus userStatus = getUserStatusValue(updateStatusUserRequestDTO.getUserStatusId());
 
         user.setUserStatus(userStatus);
 
