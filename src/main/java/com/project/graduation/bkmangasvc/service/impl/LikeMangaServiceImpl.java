@@ -12,6 +12,7 @@ import com.project.graduation.bkmangasvc.entity.Manga;
 import com.project.graduation.bkmangasvc.entity.User;
 import com.project.graduation.bkmangasvc.entity.UserStatus;
 import com.project.graduation.bkmangasvc.exception.CustomException;
+import com.project.graduation.bkmangasvc.helper.TokenHelper;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
 import com.project.graduation.bkmangasvc.repository.LikeMangaRepository;
 import com.project.graduation.bkmangasvc.repository.MangaRepository;
@@ -38,7 +39,7 @@ public class LikeMangaServiceImpl implements LikeMangaService {
     public ApiResponse<GetLikeMangaResponseDTO> getLikeManga(
             GetLikeMangaRequestDTO getLikeMangaRequestDTO
     ) throws CustomException {
-        User user = getUserValue(getLikeMangaRequestDTO.getUserId());
+        User user = getUserValue(TokenHelper.getPrincipal());
         Manga manga = getMangaValue(getLikeMangaRequestDTO.getMangaId());
 
         Optional<LikeManga> likeManga = likeMangaRepository.findByMangaAndUser(manga, user);
@@ -54,7 +55,7 @@ public class LikeMangaServiceImpl implements LikeMangaService {
     public ApiResponse<CreateLikeMangaResponseDTO> createLikeManga(
             CreateLikeMangaRequestDTO createLikeMangaRequestDTO
     ) throws CustomException {
-        User user = getUserValue(createLikeMangaRequestDTO.getUserId());
+        User user = getUserValue(TokenHelper.getPrincipal());
         Manga manga = getMangaValue(createLikeMangaRequestDTO.getMangaId());
 
         LikeManga likeManga = new LikeManga();

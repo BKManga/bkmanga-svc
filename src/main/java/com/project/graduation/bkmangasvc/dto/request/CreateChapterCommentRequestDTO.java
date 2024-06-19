@@ -15,7 +15,4 @@ public class CreateChapterCommentRequestDTO {
 
     @NotNull
     private Long chapterId;
-
-    @NotNull
-    private Long userId;
 }

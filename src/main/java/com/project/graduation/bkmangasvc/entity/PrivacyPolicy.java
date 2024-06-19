@@ -23,8 +23,9 @@ public class PrivacyPolicy {
     @Column(nullable = false, length = 512)
     private String answer;
 
-    @Column(nullable = false)
-    private Long updatedBy;
+    @ManyToOne
+    @JoinColumn (nullable = false)
+    private User updatedBy;
 
     @UpdateTimestamp
     @Column(
@@ -34,7 +35,7 @@ public class PrivacyPolicy {
     )
     private Date updatedAt;
 
-    public PrivacyPolicy(String question, String answer, Long updatedBy) {
+    public PrivacyPolicy(String question, String answer, User updatedBy) {
         this.question = question;
         this.answer = answer;
         this.updatedBy = updatedBy;

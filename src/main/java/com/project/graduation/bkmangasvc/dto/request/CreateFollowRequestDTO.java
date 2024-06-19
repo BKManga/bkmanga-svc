@@ -10,7 +10,4 @@ public class CreateFollowRequestDTO {
 
     @NotNull
     private Long mangaId;
-
-    @NotNull
-    private Long userId;
 }

@@ -12,6 +12,7 @@ import com.project.graduation.bkmangasvc.entity.MangaComment;
 import com.project.graduation.bkmangasvc.entity.User;
 import com.project.graduation.bkmangasvc.entity.UserStatus;
 import com.project.graduation.bkmangasvc.exception.CustomException;
+import com.project.graduation.bkmangasvc.helper.TokenHelper;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
 import com.project.graduation.bkmangasvc.repository.MangaCommentRepository;
 import com.project.graduation.bkmangasvc.repository.MangaRepository;
@@ -62,7 +63,7 @@ public class MangaCommentServiceImpl implements MangaCommentService {
             CreateMangaCommentRequestDTO mangaCommentCreateRequestDTO
     ) throws CustomException {
         Manga foundManga = getMangaValue(mangaCommentCreateRequestDTO.getMangaId());
-        User foundUser = getUserValue(mangaCommentCreateRequestDTO.getUserId());
+        User foundUser = getUserValue(TokenHelper.getPrincipal());
 
         MangaComment mangaComment = new MangaComment();
 
@@ -81,7 +82,7 @@ public class MangaCommentServiceImpl implements MangaCommentService {
     ) throws CustomException {
         MangaComment mangaComment = getMangaCommentValue(
                 deleteMangaCommentRequestDTO.getMangaCommentId(),
-                deleteMangaCommentRequestDTO.getUserId()
+                TokenHelper.getPrincipal()
         );
 
         mangaCommentRepository.delete(mangaComment);

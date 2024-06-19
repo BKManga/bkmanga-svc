@@ -6,6 +6,7 @@ import com.project.graduation.bkmangasvc.entity.Genre;
 import com.project.graduation.bkmangasvc.exception.CustomException;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
 import com.project.graduation.bkmangasvc.service.GenreService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,7 @@ public class GenreController {
     }
 
     @PostMapping(path = "/create")
+    @Transactional(rollbackOn = CustomException.class)
     public ApiResponse<Genre> createGenre(
             @Valid @RequestBody CreateGenreRequestDTO createGenreRequestDTO
     ) throws CustomException {
@@ -37,6 +39,7 @@ public class GenreController {
     }
 
     @PutMapping(path = "/update")
+    @Transactional(rollbackOn = CustomException.class)
     public ApiResponse<Genre> updateGenre(
             @Valid @RequestBody UpdateGenreRequestDTO updateGenreRequestDTO
     ) throws CustomException {
@@ -44,6 +47,7 @@ public class GenreController {
     }
 
     @DeleteMapping(path = "/delete")
+    @Transactional(rollbackOn = CustomException.class)
     public ApiResponse<?> deleteGenre(
             @Valid @RequestBody DeleteGenreRequestDTO deleteGenreRequestDTO
     ) throws CustomException {

@@ -13,7 +13,4 @@ public class CreateOrEditHistoryRequestDTO {
 
     @NotNull
     private Long chapterId;
-
-    @NotNull
-    private Long userId;
 }

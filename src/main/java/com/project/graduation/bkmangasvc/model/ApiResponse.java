@@ -13,7 +13,7 @@ public class ApiResponse<T> {
 
     private String errorCode;
 
-    private Object message;
+    private String message;
 
     private int responseCode;
 
@@ -33,7 +33,7 @@ public class ApiResponse<T> {
         return new ApiResponse<>(result, errorCode, message, HttpStatus.BAD_REQUEST.value());
     }
 
-    public static <T> ApiResponse<T> failureWithCode(String errorCode, Object message, T result, HttpStatus httpStatus) {
-        return new ApiResponse<>(result, errorCode, message, httpStatus.value());
-    }
+//    public static <T> ApiResponse<T> failureWithCode(String errorCode, Object message, T result, HttpStatus httpStatus) {
+//        return new ApiResponse<>(result, errorCode, message, httpStatus.value());
+//    }
 }

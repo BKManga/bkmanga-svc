@@ -50,5 +50,4 @@ public class OutLawReportController {
     ) throws CustomException {
         return outLawReportService.updateOutLawReport(updateOutLawReportRequestDTO);
     }
-
 }

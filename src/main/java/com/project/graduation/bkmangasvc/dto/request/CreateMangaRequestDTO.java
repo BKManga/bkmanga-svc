@@ -31,9 +31,6 @@ public class CreateMangaRequestDTO {
     private String description;
 
     @NotNull
-    private Long updatedById;
-
-    @NotNull
     @NotEmpty
     private List<Integer> listGenreId;
 

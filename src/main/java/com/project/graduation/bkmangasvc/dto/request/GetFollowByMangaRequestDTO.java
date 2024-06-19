@@ -3,17 +3,13 @@ package com.project.graduation.bkmangasvc.dto.request;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
-public class GetFollowRequestDTO {
+@Data
+@NoArgsConstructor
+public class GetFollowByMangaRequestDTO {
 
     @NotNull
-    private Long userId;
-
-    @NotNull
-    private Integer page;
-
-    @NotNull
-    private Integer size;
+    private Long mangaId;
 }

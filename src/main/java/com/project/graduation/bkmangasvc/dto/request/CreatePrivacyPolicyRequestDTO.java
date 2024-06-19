@@ -1,5 +1,6 @@
 package com.project.graduation.bkmangasvc.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,17 +9,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
-public class GetMangaByGenreRequestDTO {
+public class CreatePrivacyPolicyRequestDTO {
 
     @NotNull
-    private Integer genreId;
+    @NotBlank
+    private String question;
 
     @NotNull
-    private Integer page;
-
-    @NotNull
-    private Integer size;
-
-    @NotNull
-    private String orderBy;
+    @NotBlank
+    private String answer;
 }

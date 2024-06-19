@@ -2,7 +2,6 @@ package com.project.graduation.bkmangasvc.controller;
 
 import com.project.graduation.bkmangasvc.dto.request.CreateOrEditHistoryRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.DeleteHistoryRequestDTO;
-import com.project.graduation.bkmangasvc.dto.request.GetListHistoryRequestDTO;
 import com.project.graduation.bkmangasvc.dto.response.GetListHistoryResponseDTO;
 import com.project.graduation.bkmangasvc.exception.CustomException;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
@@ -19,11 +18,9 @@ import org.springframework.web.bind.annotation.*;
 public class HistoryController {
     private final HistoryService historyService;
 
-    @PostMapping(path = "/get")
-    public ApiResponse<GetListHistoryResponseDTO> getListHistoryByUser(
-            @Valid @RequestBody GetListHistoryRequestDTO getListHistoryRequestDTO
-    ) throws CustomException {
-        return historyService.getAllHistoryByUser(getListHistoryRequestDTO);
+    @GetMapping(path = "/get")
+    public ApiResponse<GetListHistoryResponseDTO> getListHistoryByUser() throws CustomException {
+        return historyService.getAllHistoryByUser();
     }
 
     @PostMapping(path = "/createOrUpdate")

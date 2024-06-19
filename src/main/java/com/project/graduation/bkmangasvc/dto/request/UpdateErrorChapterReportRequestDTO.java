@@ -15,7 +15,4 @@ public class UpdateErrorChapterReportRequestDTO {
 
     @NotNull
     private Integer errorReportStatusId;
-
-    @NotNull
-    private Long updatedById;
 }

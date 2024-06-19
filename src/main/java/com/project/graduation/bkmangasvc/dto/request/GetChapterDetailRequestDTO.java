@@ -11,9 +11,6 @@ import lombok.NoArgsConstructor;
 public class GetChapterDetailRequestDTO {
 
     @NotNull
-    private Long userId;
-
-    @NotNull
     private Long mangaId;
 
     @NotNull

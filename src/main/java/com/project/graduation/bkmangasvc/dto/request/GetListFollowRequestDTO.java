@@ -6,7 +6,11 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class GetListHistoryRequestDTO {
+public class GetListFollowRequestDTO {
+
     @NotNull
-    private Long userId;
+    private Integer page;
+
+    @NotNull
+    private Integer size;
 }

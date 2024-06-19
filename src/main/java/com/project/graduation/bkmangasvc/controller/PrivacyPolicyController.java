@@ -1,5 +1,6 @@
 package com.project.graduation.bkmangasvc.controller;
 
+import com.project.graduation.bkmangasvc.dto.request.CreatePrivacyPolicyRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.UpdatePrivacyPolicyRequestDTO;
 import com.project.graduation.bkmangasvc.entity.PrivacyPolicy;
 import com.project.graduation.bkmangasvc.exception.CustomException;
@@ -22,6 +23,14 @@ public class PrivacyPolicyController {
     @GetMapping("/all")
     public ApiResponse<List<PrivacyPolicy>> getAllPrivacyPolicy() {
         return privacyPolicyService.getPrivacyPolicy();
+    }
+
+    @PostMapping("/create")
+    @Transactional(rollbackOn = CustomException.class)
+    public ApiResponse<PrivacyPolicy> createPrivacyPolicy(
+        @Valid @RequestBody CreatePrivacyPolicyRequestDTO createPrivacyPolicyRequestDTO
+    ) throws CustomException {
+        return privacyPolicyService.createPrivacyPolicy(createPrivacyPolicyRequestDTO);
     }
 
 //    @PreAuthorize("hasAuthority('ADMIN')")

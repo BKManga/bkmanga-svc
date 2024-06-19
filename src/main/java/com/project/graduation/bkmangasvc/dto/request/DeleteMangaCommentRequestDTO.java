@@ -10,7 +10,4 @@ public class DeleteMangaCommentRequestDTO {
 
     @NotNull
     private Long mangaCommentId;
-
-    @NotNull
-    private Long userId;
 }

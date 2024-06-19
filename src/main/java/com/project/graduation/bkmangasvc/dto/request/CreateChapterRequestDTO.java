@@ -16,8 +16,5 @@ public class CreateChapterRequestDTO {
     private String name;
 
     @NotNull
-    private Long uploadedById;
-
-    @NotNull
     private Long mangaId;
 }

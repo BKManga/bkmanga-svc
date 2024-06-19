@@ -116,4 +116,8 @@ public class User {
     @OneToMany(mappedBy = "uploadedBy", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Chapter> listChapterUploaded = new ArrayList<>();
+
+    @OneToMany(mappedBy = "updatedBy", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<PrivacyPolicy> listPrivacyPolicyUpdated = new ArrayList<>();
 }

@@ -8,6 +8,7 @@ import com.project.graduation.bkmangasvc.dto.request.GetListErrorChapterReportRe
 import com.project.graduation.bkmangasvc.dto.request.UpdateErrorChapterReportRequestDTO;
 import com.project.graduation.bkmangasvc.entity.*;
 import com.project.graduation.bkmangasvc.exception.CustomException;
+import com.project.graduation.bkmangasvc.helper.TokenHelper;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
 import com.project.graduation.bkmangasvc.repository.*;
 import com.project.graduation.bkmangasvc.service.ErrorChapterReportService;
@@ -64,7 +65,7 @@ public class ErrorChapterReportServiceImpl implements ErrorChapterReportService 
         Manga manga = getMangaValue(createErrorChapterReportRequestDTO.getMangaId());
         Chapter chapter = getChapterValue(createErrorChapterReportRequestDTO.getChapterId());
 
-        User userUpload = getUserValue(createErrorChapterReportRequestDTO.getUploadedById());
+        User userUpload = getUserValue(TokenHelper.getPrincipal());
         ErrorType errorType = getErrorTypeValue(createErrorChapterReportRequestDTO.getErrorTypeId());
 
         ErrorChapterReport errorChapterReport = new ErrorChapterReport();
@@ -88,7 +89,7 @@ public class ErrorChapterReportServiceImpl implements ErrorChapterReportService 
                 updateErrorChapterReportRequestDTO.getErrorChapterReportId()
         );
 
-        User userUpdate = getUserValue(updateErrorChapterReportRequestDTO.getUpdatedById());
+        User userUpdate = getUserValue(TokenHelper.getPrincipal());
 
         ErrorReportStatus errorReportStatus = getErrorReportStatusValue(
                 updateErrorChapterReportRequestDTO.getErrorReportStatusId()

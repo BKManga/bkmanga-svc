@@ -15,7 +15,4 @@ public class CreateMangaCommentRequestDTO {
 
     @NotNull
     private Long mangaId;
-
-    @NotNull
-    private Long userId;
 }

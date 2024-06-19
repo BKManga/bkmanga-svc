@@ -7,6 +7,7 @@ import com.project.graduation.bkmangasvc.entity.Author;
 import com.project.graduation.bkmangasvc.exception.CustomException;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
 import com.project.graduation.bkmangasvc.service.AuthorService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,7 +30,7 @@ public class AuthorController {
     @PostMapping(path = "/get")
     public ApiResponse<Page<Author>> getListAuthor(
             @Valid @RequestBody GetListAuthorRequestDTO getListAuthorRequestDTO
-            ) {
+    ) {
         return authorService.getListAuthor(getListAuthorRequestDTO);
     }
 
@@ -39,6 +40,7 @@ public class AuthorController {
     }
 
     @PostMapping(path = "/create")
+    @Transactional(rollbackOn = CustomException.class)
     public ApiResponse<Author> createAuthor(
             @Valid @RequestBody CreateAuthorRequestDTO createAuthorRequestDTO
     ) throws CustomException {
@@ -46,6 +48,7 @@ public class AuthorController {
     }
 
     @PutMapping(path = "/update")
+    @Transactional(rollbackOn = CustomException.class)
     public ApiResponse<Author> updateAuthor(
             @Valid @RequestBody UpdateAuthorRequestDTO updateAuthorRequestDTO
     ) throws CustomException {

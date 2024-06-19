@@ -9,6 +9,7 @@ import com.project.graduation.bkmangasvc.dto.request.GetListChapterCommentReques
 import com.project.graduation.bkmangasvc.dto.response.CreateChapterCommentResponseDTO;
 import com.project.graduation.bkmangasvc.entity.*;
 import com.project.graduation.bkmangasvc.exception.CustomException;
+import com.project.graduation.bkmangasvc.helper.TokenHelper;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
 import com.project.graduation.bkmangasvc.repository.ChapterCommentRepository;
 import com.project.graduation.bkmangasvc.repository.ChapterRepository;
@@ -55,7 +56,7 @@ public class ChapterCommentServiceImpl implements ChapterCommentService {
     public ApiResponse<CreateChapterCommentResponseDTO> createChapterComment(
             CreateChapterCommentRequestDTO createChapterCommentRequestDTO
     ) throws CustomException {
-        User user = getUserValue(createChapterCommentRequestDTO.getUserId());
+        User user = getUserValue(TokenHelper.getPrincipal());
         Chapter chapter = getChapterValue(createChapterCommentRequestDTO.getChapterId());
 
         ChapterComment chapterComment = new ChapterComment();
@@ -74,7 +75,7 @@ public class ChapterCommentServiceImpl implements ChapterCommentService {
     ) throws CustomException {
         ChapterComment chapterComment = getChapterCommentValue(
                 deleteChapterCommentRequestDTO.getChapterCommentId(),
-                deleteChapterCommentRequestDTO.getUserId()
+                TokenHelper.getPrincipal()
         );
 
         chapterCommentRepository.delete(chapterComment);

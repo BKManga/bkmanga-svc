@@ -21,9 +21,6 @@ public class CreateOutLawReportRequestDTO {
     private String description;
 
     @NotNull
-    private Long uploadedById;
-
-    @NotNull
     private Integer outLawTypeId;
 
     @NotNull

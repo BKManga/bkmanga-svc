@@ -10,7 +10,4 @@ public class DeleteChapterCommentRequestDTO {
 
     @NotNull
     private Long chapterCommentId;
-
-    @NotNull
-    private Long userId;
 }

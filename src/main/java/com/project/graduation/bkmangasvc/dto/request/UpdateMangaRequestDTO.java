@@ -38,9 +38,6 @@ public class UpdateMangaRequestDTO {
     private List<Integer> listAuthorId;
 
     @NotNull
-    private Long updatedById;
-
-    @NotNull
     private Integer ageRangeId;
 
     @NotNull

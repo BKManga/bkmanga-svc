@@ -19,7 +19,4 @@ public class UpdatePrivacyPolicyRequestDTO {
     @NotNull
     @NotBlank
     private String answer;
-
-    @NotNull
-    private Long updatedBy;
 }

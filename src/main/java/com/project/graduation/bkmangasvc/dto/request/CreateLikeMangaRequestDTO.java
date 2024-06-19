@@ -10,7 +10,4 @@ public class CreateLikeMangaRequestDTO {
 
     @NotNull
     private Long mangaId;
-
-    @NotNull
-    private Long userId;
 }

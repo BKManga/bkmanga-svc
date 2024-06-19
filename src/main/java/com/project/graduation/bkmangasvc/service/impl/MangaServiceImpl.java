@@ -9,6 +9,7 @@ import com.project.graduation.bkmangasvc.dto.response.GetMangaResponseDTO;
 import com.project.graduation.bkmangasvc.dto.response.GetMangaTopResponseDTO;
 import com.project.graduation.bkmangasvc.entity.*;
 import com.project.graduation.bkmangasvc.exception.CustomException;
+import com.project.graduation.bkmangasvc.helper.TokenHelper;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
 import com.project.graduation.bkmangasvc.repository.*;
 import com.project.graduation.bkmangasvc.service.MangaService;
@@ -188,7 +189,7 @@ public class MangaServiceImpl implements MangaService {
     public ApiResponse<Manga> createManga(CreateMangaRequestDTO createMangaRequestDTO) throws CustomException {
         List<Author> authorList = authorRepository.findByIdIn(createMangaRequestDTO.getListAuthorId());
         List<Genre> genreList = genreRepository.findByIdIn(createMangaRequestDTO.getListGenreId());
-        User userUpdate = getUserValue(createMangaRequestDTO.getUpdatedById());
+        User userUpdate = getUserValue(TokenHelper.getPrincipal());
 
         Manga manga = new Manga();
 
@@ -237,7 +238,7 @@ public class MangaServiceImpl implements MangaService {
     public ApiResponse<Manga> updateManga(UpdateMangaRequestDTO updateMangaRequestDTO) throws CustomException {
 
         Manga manga = getMangaValue(updateMangaRequestDTO.getMangaId());
-        User userUpdate = getUserValue(updateMangaRequestDTO.getUpdatedById());
+        User userUpdate = getUserValue(TokenHelper.getPrincipal());
         MangaStatus mangaStatus = getMangaStatus(updateMangaRequestDTO.getMangaStatusId());
         AgeRange ageRange = getAgeRangeValue(updateMangaRequestDTO.getAgeRangeId());
 

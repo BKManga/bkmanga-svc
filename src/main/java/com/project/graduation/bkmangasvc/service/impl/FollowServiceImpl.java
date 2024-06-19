@@ -4,12 +4,14 @@ import com.project.graduation.bkmangasvc.constant.ErrorCode;
 import com.project.graduation.bkmangasvc.constant.UserStatusEnum;
 import com.project.graduation.bkmangasvc.dto.request.CreateFollowRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.DeleteFollowRequestDTO;
-import com.project.graduation.bkmangasvc.dto.request.GetFollowRequestDTO;
+import com.project.graduation.bkmangasvc.dto.request.GetFollowByMangaRequestDTO;
+import com.project.graduation.bkmangasvc.dto.request.GetListFollowRequestDTO;
 import com.project.graduation.bkmangasvc.dto.response.CreateFollowResponseDTO;
-import com.project.graduation.bkmangasvc.dto.response.GetFollowResponseDTO;
+import com.project.graduation.bkmangasvc.dto.response.GetFollowByMangaResponseDTO;
 import com.project.graduation.bkmangasvc.dto.response.GetMangaResponseDTO;
 import com.project.graduation.bkmangasvc.entity.*;
 import com.project.graduation.bkmangasvc.exception.CustomException;
+import com.project.graduation.bkmangasvc.helper.TokenHelper;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
 import com.project.graduation.bkmangasvc.repository.*;
 import com.project.graduation.bkmangasvc.service.FollowService;
@@ -18,6 +20,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -32,15 +36,15 @@ public class FollowServiceImpl implements FollowService {
     private final ModelMapper modelMapper;
 
     @Override
-    public ApiResponse<Page<GetMangaResponseDTO>> getFollowByUser(
-            GetFollowRequestDTO getFollowRequestDTO
+    public ApiResponse<Page<GetMangaResponseDTO>> getListFollowByUser(
+            GetListFollowRequestDTO getListFollowRequestDTO
     ) throws CustomException {
 
-        User user = getUserValue(getFollowRequestDTO.getUserId());
+        User user = getUserValue(TokenHelper.getPrincipal());
 
         Pageable pageable = PageRequest.of(
-                getFollowRequestDTO.getPage(),
-                getFollowRequestDTO.getSize()
+                getListFollowRequestDTO.getPage(),
+                getListFollowRequestDTO.getSize()
         );
 
         Page<Follow> followListPage = followRepository.findByUserOrderByCreatedAtDesc(user, pageable);
@@ -51,11 +55,28 @@ public class FollowServiceImpl implements FollowService {
     }
 
     @Override
+    public ApiResponse<GetFollowByMangaResponseDTO> getFollowByManga(
+            GetFollowByMangaRequestDTO getFollowByMangaRequestDTO
+    ) throws CustomException {
+
+        User user = getUserValue(TokenHelper.getPrincipal());
+        Manga manga = getMangaValue(getFollowByMangaRequestDTO.getMangaId());
+
+        Optional<Follow> follow = followRepository.findByMangaAndUser(manga, user);
+
+        if (follow.isPresent()) {
+            return ApiResponse.successWithResult(modelMapper.map(follow.get(), GetFollowByMangaResponseDTO.class));
+        }
+
+        return ApiResponse.successWithResult(null);
+    }
+
+    @Override
     public ApiResponse<CreateFollowResponseDTO> createFollow(
             CreateFollowRequestDTO createFollowRequestDTO
     ) throws CustomException {
         Manga manga = getMangaValue(createFollowRequestDTO.getMangaId());
-        User user = getUserValue(createFollowRequestDTO.getUserId());
+        User user = getUserValue(TokenHelper.getPrincipal());
 
         Follow follow = new Follow();
         follow.setManga(manga);
@@ -123,4 +144,5 @@ public class FollowServiceImpl implements FollowService {
 
         return getMangaResponseDTO;
     }
+
 }

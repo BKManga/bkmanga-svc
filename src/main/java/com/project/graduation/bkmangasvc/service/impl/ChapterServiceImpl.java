@@ -10,6 +10,7 @@ import com.project.graduation.bkmangasvc.dto.request.UpdateChapterRequestDTO;
 import com.project.graduation.bkmangasvc.dto.response.GetChapterDetailResponseDTO;
 import com.project.graduation.bkmangasvc.entity.*;
 import com.project.graduation.bkmangasvc.exception.CustomException;
+import com.project.graduation.bkmangasvc.helper.TokenHelper;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
 import com.project.graduation.bkmangasvc.repository.*;
 import com.project.graduation.bkmangasvc.service.ChapterService;
@@ -46,7 +47,6 @@ public class ChapterServiceImpl implements ChapterService {
     ) throws CustomException {
         Manga manga = getMangaValue(getChapterDetailRequestDTO.getMangaId());
         Chapter chapter = getChapterValue(getChapterDetailRequestDTO.getChapterId());
-        User user = getUserValue(getChapterDetailRequestDTO.getUserId());
 
         GetChapterDetailResponseDTO getChapterDetailResponseDTO = new GetChapterDetailResponseDTO();
 
@@ -69,9 +69,13 @@ public class ChapterServiceImpl implements ChapterService {
         getChapterDetailResponseDTO.setManga(manga);
         getChapterDetailResponseDTO.setChapter(chapter);
 
-        Level level = user.getLevel();
+        if (TokenHelper.checkAuthentication()) {
+            User user = getUserValue(TokenHelper.getPrincipal());
 
-        level.setPoint(level.getPoint() + PointIncrease.INCREASE.getPointValue());
+            Level level = user.getLevel();
+
+            level.setPoint(level.getPoint() + PointIncrease.INCREASE.getPointValue());
+        }
 
         ViewManga viewManga = manga.getViewManga();
         viewManga.setNumberOfViews(viewManga.getNumberOfViews() + 1);
@@ -84,7 +88,7 @@ public class ChapterServiceImpl implements ChapterService {
     public ApiResponse<Chapter> createChapter(CreateChapterRequestDTO createChapterRequestDTO) throws CustomException {
 
         Manga manga = getMangaValue(createChapterRequestDTO.getMangaId());
-        User userUpdate = getUserValue(createChapterRequestDTO.getUploadedById());
+        User userUpdate = getUserValue(TokenHelper.getPrincipal());
 
         Chapter chapter = new Chapter();
         chapter.setName(createChapterRequestDTO.getName());

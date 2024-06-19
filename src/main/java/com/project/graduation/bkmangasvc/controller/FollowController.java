@@ -2,11 +2,11 @@ package com.project.graduation.bkmangasvc.controller;
 
 import com.project.graduation.bkmangasvc.dto.request.CreateFollowRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.DeleteFollowRequestDTO;
-import com.project.graduation.bkmangasvc.dto.request.GetFollowRequestDTO;
+import com.project.graduation.bkmangasvc.dto.request.GetFollowByMangaRequestDTO;
+import com.project.graduation.bkmangasvc.dto.request.GetListFollowRequestDTO;
 import com.project.graduation.bkmangasvc.dto.response.CreateFollowResponseDTO;
-import com.project.graduation.bkmangasvc.dto.response.GetFollowResponseDTO;
+import com.project.graduation.bkmangasvc.dto.response.GetFollowByMangaResponseDTO;
 import com.project.graduation.bkmangasvc.dto.response.GetMangaResponseDTO;
-import com.project.graduation.bkmangasvc.entity.Follow;
 import com.project.graduation.bkmangasvc.exception.CustomException;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
 import com.project.graduation.bkmangasvc.service.FollowService;
@@ -24,10 +24,17 @@ public class FollowController {
     private final FollowService followService;
 
     @PostMapping(path = "/get")
-    public ApiResponse<Page<GetMangaResponseDTO>> getFollow(
-            @Valid @RequestBody GetFollowRequestDTO getFollowRequestDTO
+    public ApiResponse<Page<GetMangaResponseDTO>> getListFollow(
+            @Valid @RequestBody GetListFollowRequestDTO getListFollowRequestDTO
     ) throws CustomException {
-        return followService.getFollowByUser(getFollowRequestDTO);
+        return followService.getListFollowByUser(getListFollowRequestDTO);
+    }
+
+    @PostMapping(path = "/get/by/manga")
+    public ApiResponse<GetFollowByMangaResponseDTO> getFollow(
+            @Valid @RequestBody GetFollowByMangaRequestDTO getFollowByMangaRequestDTO
+    ) throws CustomException {
+        return followService.getFollowByManga(getFollowByMangaRequestDTO);
     }
 
     @PostMapping(path = "/create")

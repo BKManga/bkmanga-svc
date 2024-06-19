@@ -22,8 +22,5 @@ public class CreateErrorChapterReportRequestDTO {
     private String description;
 
     @NotNull
-    private Long uploadedById;
-
-    @NotNull
     private Integer errorTypeId;
 }

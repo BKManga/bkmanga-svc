@@ -15,7 +15,4 @@ public class UpdateOutLawReportRequestDTO {
 
     @NotNull
     private Integer outLawReportProcessStatus;
-
-    @NotNull
-    private Long updatedById;
 }

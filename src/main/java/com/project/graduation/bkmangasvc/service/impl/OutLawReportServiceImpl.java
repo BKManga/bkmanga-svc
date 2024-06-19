@@ -10,6 +10,7 @@ import com.project.graduation.bkmangasvc.dto.request.GetOutLawReportByIdRequestD
 import com.project.graduation.bkmangasvc.dto.request.UpdateOutLawReportRequestDTO;
 import com.project.graduation.bkmangasvc.entity.*;
 import com.project.graduation.bkmangasvc.exception.CustomException;
+import com.project.graduation.bkmangasvc.helper.TokenHelper;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
 import com.project.graduation.bkmangasvc.repository.*;
 import com.project.graduation.bkmangasvc.service.OutLawReportService;
@@ -63,7 +64,7 @@ public class OutLawReportServiceImpl implements OutLawReportService {
     ) throws CustomException {
 
         User userReported = getUserValue(createOutLawReportRequestDTO.getUserReportedId());
-        User uploadedBy = getUserValue(createOutLawReportRequestDTO.getUploadedById());
+        User uploadedBy = getUserValue(TokenHelper.getPrincipal());
 
         OutLawType outLawType = getOutLawTypeValue(createOutLawReportRequestDTO.getOutLawTypeId());
         OutLawArea outLawArea = getOutLawAreaValue(createOutLawReportRequestDTO.getOutLawAreaId());
@@ -99,7 +100,7 @@ public class OutLawReportServiceImpl implements OutLawReportService {
                 updateOutLawReportRequestDTO.getOutLawReportProcessStatus()
         );
 
-        User userUpdate = getUserValue(updateOutLawReportRequestDTO.getUpdatedById());
+        User userUpdate = getUserValue(TokenHelper.getPrincipal());
 
         outLawReport.setOutLawProcessStatus(outLawProcessStatus);
         outLawReport.setUpdatedBy(userUpdate);

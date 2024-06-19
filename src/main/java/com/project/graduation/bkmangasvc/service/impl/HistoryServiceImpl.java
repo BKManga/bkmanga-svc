@@ -4,11 +4,11 @@ import com.project.graduation.bkmangasvc.constant.ErrorCode;
 import com.project.graduation.bkmangasvc.constant.UserStatusEnum;
 import com.project.graduation.bkmangasvc.dto.request.CreateOrEditHistoryRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.DeleteHistoryRequestDTO;
-import com.project.graduation.bkmangasvc.dto.request.GetListHistoryRequestDTO;
 import com.project.graduation.bkmangasvc.dto.response.GetListHistoryResponseDTO;
 import com.project.graduation.bkmangasvc.dto.response.GetMangaResponseDTO;
 import com.project.graduation.bkmangasvc.entity.*;
 import com.project.graduation.bkmangasvc.exception.CustomException;
+import com.project.graduation.bkmangasvc.helper.TokenHelper;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
 import com.project.graduation.bkmangasvc.model.HistoryResponse;
 import com.project.graduation.bkmangasvc.repository.*;
@@ -31,10 +31,8 @@ public class HistoryServiceImpl implements HistoryService {
     private final ModelMapper modelMapper;
 
     @Override
-    public ApiResponse<GetListHistoryResponseDTO> getAllHistoryByUser(
-            GetListHistoryRequestDTO getListHistoryRequestDTO
-    ) throws CustomException {
-        User user = getUserValue(getListHistoryRequestDTO.getUserId());
+    public ApiResponse<GetListHistoryResponseDTO> getAllHistoryByUser() throws CustomException {
+        User user = getUserValue(TokenHelper.getPrincipal());
 
         List<History> historyList = historyRepository.findByUserOrderByUpdatedAtDesc(user);
 
@@ -57,7 +55,7 @@ public class HistoryServiceImpl implements HistoryService {
     public ApiResponse<?> createOrEditHistory(
             CreateOrEditHistoryRequestDTO createOrEditHistoryRequestDTO
     ) throws CustomException {
-        User user = getUserValue(createOrEditHistoryRequestDTO.getUserId());
+        User user = getUserValue(TokenHelper.getPrincipal());
 
         Optional<History> foundHistory = historyRepository.findByMangaAndUser(
                 createOrEditHistoryRequestDTO.getMangaId(),
@@ -96,7 +94,7 @@ public class HistoryServiceImpl implements HistoryService {
         Optional<UserStatus> userStatus = userStatusRepository.findById(UserStatusEnum.ACTIVE.getCode());
 
         if (userStatus.isEmpty()) {
-            throw new CustomException(ErrorCode.USER_NOT_EXIST);
+            throw new CustomException(ErrorCode.UNKNOWN_ERROR);
         }
 
         Optional<User> foundUser = userRepository.findByIdAndUserStatus(userId, userStatus.get());

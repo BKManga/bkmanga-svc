@@ -58,11 +58,11 @@ public class Database {
 
     private void importData() throws Exception{
         importGenreData();
-        importPrivacyPolicyData();
         importGenderData();
         importUserStatusData();
         importAgeRangeData();
         importUserData();
+        importPrivacyPolicyData();
         importMangaStatusData();
         importMangaData();
         importGenreMangaData();
@@ -95,14 +95,18 @@ public class Database {
         CSVReader csvReader = buildCSVReader("privacy-policy-seeder.csv");
 
         String[] nextLine;
+        Optional<User> foundUser = userRepository.findById(2L);
         ArrayList<PrivacyPolicy> privacyPolicyArrayList = new ArrayList<>();
-        while ((nextLine = csvReader.readNext()) != null) {
-            privacyPolicyArrayList.add(
-                    new PrivacyPolicy(nextLine[0], nextLine[1], 1L)
-            );
-        }
 
-        privacyPolicyRepository.saveAll(privacyPolicyArrayList);
+        if (foundUser.isPresent()) {
+            while ((nextLine = csvReader.readNext()) != null) {
+                privacyPolicyArrayList.add(
+                        new PrivacyPolicy(nextLine[0], nextLine[1], foundUser.get())
+                );
+            }
+
+            privacyPolicyRepository.saveAll(privacyPolicyArrayList);
+        }
     }
 
     private void importGenreData() throws Exception {

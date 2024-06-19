@@ -5,6 +5,7 @@ import com.project.graduation.bkmangasvc.dto.request.CreateGenreRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.DeleteGenreRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.UpdateGenreRequestDTO;
 import com.project.graduation.bkmangasvc.entity.Genre;
+import com.project.graduation.bkmangasvc.entity.GenreManga;
 import com.project.graduation.bkmangasvc.exception.CustomException;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
 import com.project.graduation.bkmangasvc.repository.GenreMangaRepository;
@@ -18,7 +19,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -71,8 +71,9 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public ApiResponse<?> deleteGenre(DeleteGenreRequestDTO deleteGenreRequestDTO) throws CustomException {
         Genre genre = getValueGenre(deleteGenreRequestDTO.getGenreId());
-
+        List<GenreManga> genreMangaList = genreMangaRepository.findGenreMangaByGenre(genre);
         genreRepository.delete(genre);
+        genreMangaRepository.deleteAll(genreMangaList);
         return ApiResponse.successWithResult(null);
     }
 
