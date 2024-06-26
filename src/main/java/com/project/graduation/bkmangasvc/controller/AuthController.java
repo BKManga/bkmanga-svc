@@ -2,6 +2,7 @@ package com.project.graduation.bkmangasvc.controller;
 
 import com.project.graduation.bkmangasvc.dto.request.UserLoginRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.UserRegisterRequestDTO;
+import com.project.graduation.bkmangasvc.dto.response.GetAuthInfoResponseDTO;
 import com.project.graduation.bkmangasvc.dto.response.UserLoginResponseDTO;
 import com.project.graduation.bkmangasvc.exception.CustomException;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
@@ -30,6 +31,11 @@ public class AuthController {
             @Valid @RequestBody UserRegisterRequestDTO userRegisterRequestDTO
     ) throws CustomException {
         return authService.register(userRegisterRequestDTO);
+    }
+
+    @GetMapping(path = "/info")
+    public ApiResponse<GetAuthInfoResponseDTO> getAuthInfo() throws CustomException {
+        return authService.getAuthInfo();
     }
 
     @PreAuthorize("hasAuthority('USER')")

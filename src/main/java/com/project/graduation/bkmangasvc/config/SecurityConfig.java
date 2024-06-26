@@ -1,7 +1,6 @@
 package com.project.graduation.bkmangasvc.config;
 
 import com.project.graduation.bkmangasvc.security.AuthFilter;
-import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -102,6 +101,12 @@ public class SecurityConfig {
                 "api/v1/privacyPolicy/all"
         );
 
+        final List<String> publicAuthorEndPoints = List.of(
+                "api/v1/author/all",
+                "api/v1/author/get",
+                "api/v1/author/detail"
+        );
+
         return Stream.of(
                 publicDocEndPoints,
                 publicMangaEndPoints,
@@ -110,7 +115,8 @@ public class SecurityConfig {
                 publicChapterCommentEndPoints,
                 publicGenreEndPoints,
                 publicAuthEndPoints,
-                publicPrivacyPolicyEndPoints
+                publicPrivacyPolicyEndPoints,
+                publicAuthorEndPoints
         ).flatMap(Collection::stream).toList().toArray(String[]::new);
     }
 }

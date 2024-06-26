@@ -1,6 +1,7 @@
 package com.project.graduation.bkmangasvc.controller;
 
 import com.project.graduation.bkmangasvc.dto.request.CreateAuthorRequestDTO;
+import com.project.graduation.bkmangasvc.dto.request.GetAuthorDetailRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.GetListAuthorRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.UpdateAuthorRequestDTO;
 import com.project.graduation.bkmangasvc.entity.Author;
@@ -35,8 +36,10 @@ public class AuthorController {
     }
 
     @PostMapping(path = "/detail")
-    public Author getAuthorDetail() {
-        return null;
+    public ApiResponse<Author> getAuthorDetail(
+            @Valid @RequestBody GetAuthorDetailRequestDTO getAuthorDetailRequestDTO
+    ) throws CustomException {
+        return authorService.getAuthorDetail(getAuthorDetailRequestDTO);
     }
 
     @PostMapping(path = "/create")

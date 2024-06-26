@@ -2,6 +2,7 @@ package com.project.graduation.bkmangasvc.service.impl;
 
 import com.project.graduation.bkmangasvc.constant.ErrorCode;
 import com.project.graduation.bkmangasvc.dto.request.CreateAuthorRequestDTO;
+import com.project.graduation.bkmangasvc.dto.request.GetAuthorDetailRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.GetListAuthorRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.UpdateAuthorRequestDTO;
 import com.project.graduation.bkmangasvc.entity.Author;
@@ -44,6 +45,15 @@ public class AuthorServiceImpl implements AuthorService {
         Page<Author> authorPage = authorRepository.findByOrderByNameAsc(pageable);
 
         return ApiResponse.successWithResult(authorPage);
+    }
+
+    @Override
+    public ApiResponse<Author> getAuthorDetail(
+            GetAuthorDetailRequestDTO getAuthorDetailRequestDTO
+    ) throws CustomException {
+        Author author = getAuthorValue(getAuthorDetailRequestDTO.getAuthorId());
+
+        return ApiResponse.successWithResult(author);
     }
 
     @Override
@@ -96,7 +106,7 @@ public class AuthorServiceImpl implements AuthorService {
         Optional<Author> author = authorRepository.findById(authorId);
 
         if (author.isEmpty()) {
-            throw new CustomException(ErrorCode.UNKNOWN_ERROR);
+            throw new CustomException(ErrorCode.AUTHOR_NOT_EXIST);
         }
 
         return author.get();

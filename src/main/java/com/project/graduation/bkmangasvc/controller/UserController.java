@@ -26,6 +26,13 @@ public class UserController {
         return userService.getUserList(getUserListRequestDTO);
     }
 
+    @PostMapping("/detail")
+    public ApiResponse<User> getUserDetail(
+
+    ) throws CustomException {
+        return null;
+    }
+
     @PutMapping(path = "/update/status")
     @Transactional(rollbackOn = CustomException.class)
     public ApiResponse<User> updateStatusUser(

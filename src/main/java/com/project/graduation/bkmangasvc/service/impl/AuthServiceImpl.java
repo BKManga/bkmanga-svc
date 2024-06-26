@@ -4,12 +4,14 @@ import com.project.graduation.bkmangasvc.constant.ErrorCode;
 import com.project.graduation.bkmangasvc.constant.UserStatusEnum;
 import com.project.graduation.bkmangasvc.dto.request.UserLoginRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.UserRegisterRequestDTO;
+import com.project.graduation.bkmangasvc.dto.response.GetAuthInfoResponseDTO;
 import com.project.graduation.bkmangasvc.dto.response.UserLoginResponseDTO;
 import com.project.graduation.bkmangasvc.entity.Gender;
 import com.project.graduation.bkmangasvc.entity.Level;
 import com.project.graduation.bkmangasvc.entity.User;
 import com.project.graduation.bkmangasvc.entity.UserStatus;
 import com.project.graduation.bkmangasvc.exception.CustomException;
+import com.project.graduation.bkmangasvc.helper.TokenHelper;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
 import com.project.graduation.bkmangasvc.repository.GenderRepository;
 import com.project.graduation.bkmangasvc.repository.LevelRepository;
@@ -32,20 +34,14 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class AuthServiceImpl implements AuthService {
+
     private final AuthenticationManager authenticationManager;
-
     private final TokenUtil tokenUtil;
-
     private final UserRepository userRepository;
-
     private final LevelRepository levelRepository;
-
     private final UserStatusRepository userStatusRepository;
-
     private final GenderRepository genderRepository;
-
     private final ModelMapper modelMapper;
-
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
@@ -89,5 +85,28 @@ public class AuthServiceImpl implements AuthService {
 
         levelRepository.save(level);
         return ApiResponse.successWithResult(true);
+    }
+
+    @Override
+    public ApiResponse<GetAuthInfoResponseDTO> getAuthInfo() throws CustomException {
+        User user = getUserValue(TokenHelper.getPrincipal());
+        return ApiResponse.successWithResult(modelMapper.map(user, GetAuthInfoResponseDTO.class));
+    }
+
+    private User getUserValue(Long userId) throws CustomException{
+
+        Optional<UserStatus> userStatus = userStatusRepository.findById(UserStatusEnum.ACTIVE.getCode());
+
+        if (userStatus.isEmpty()) {
+            throw new CustomException(ErrorCode.UNKNOWN_ERROR);
+        }
+
+        Optional<User> foundUser = userRepository.findByIdAndUserStatus(userId, userStatus.get());
+
+        if (foundUser.isEmpty()) {
+            throw new CustomException(ErrorCode.USER_NOT_EXIST);
+        }
+
+        return foundUser.get();
     }
 }

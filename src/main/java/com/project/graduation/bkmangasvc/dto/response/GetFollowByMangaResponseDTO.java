@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GetFollowByMangaResponseDTO {
 
-    private Long followId;
+    private Long id;
 }
