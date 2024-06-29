@@ -3,6 +3,7 @@ package com.project.graduation.bkmangasvc.service.impl;
 import com.project.graduation.bkmangasvc.constant.ErrorCode;
 import com.project.graduation.bkmangasvc.constant.UserStatusEnum;
 import com.project.graduation.bkmangasvc.dto.request.CreatePrivacyPolicyRequestDTO;
+import com.project.graduation.bkmangasvc.dto.request.GetPrivacyPolicyDetailRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.UpdatePrivacyPolicyRequestDTO;
 import com.project.graduation.bkmangasvc.entity.PrivacyPolicy;
 import com.project.graduation.bkmangasvc.entity.User;
@@ -33,6 +34,15 @@ public class PrivacyPolicyServiceImpl implements PrivacyPolicyService {
         List<PrivacyPolicy> privacyPolicyList = privacyPolicyRepository.findAll();
 
         return ApiResponse.successWithResult(privacyPolicyList);
+    }
+
+    @Override
+    public ApiResponse<PrivacyPolicy> getPrivacyPolicyDetail(
+            GetPrivacyPolicyDetailRequestDTO getPrivacyPolicyDetailRequestDTO
+    ) throws CustomException {
+        PrivacyPolicy privacyPolicy = getPrivacyPolicyValue(getPrivacyPolicyDetailRequestDTO.getPrivacyPolicyId());
+
+        return ApiResponse.successWithResult(privacyPolicy);
     }
 
     @Override

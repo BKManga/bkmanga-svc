@@ -1,5 +1,6 @@
 package com.project.graduation.bkmangasvc.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,5 +23,6 @@ public class OutLawType {
     private String name;
 
     @OneToMany(mappedBy = "outLawType", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<OutLawReport> outLawReportList = new ArrayList<>();
 }

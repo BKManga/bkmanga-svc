@@ -1,5 +1,6 @@
 package com.project.graduation.bkmangasvc.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +22,7 @@ public class Gender {
     private String name;
 
     @OneToMany(mappedBy = "gender", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<User> userList;
 
     public Gender(String name) {

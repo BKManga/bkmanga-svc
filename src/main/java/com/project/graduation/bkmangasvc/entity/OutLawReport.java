@@ -20,7 +20,6 @@ public class OutLawReport {
     private Long id;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "user_report")
     private User userReported;
 
@@ -31,7 +30,6 @@ public class OutLawReport {
     private String description;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "uploaded_by")
     private User uploadedBy;
 
@@ -56,17 +54,14 @@ public class OutLawReport {
     private Date updatedAt;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "out_law_status_id")
     private OutLawProcessStatus outLawProcessStatus;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "out_law_type_id")
     private OutLawType outLawType;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "out_law_area_id")
     private OutLawArea outLawArea;
 }

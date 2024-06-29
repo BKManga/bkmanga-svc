@@ -10,6 +10,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping(path = "/get")
     public ApiResponse<Page<User>> getUserList(
             @Valid @RequestBody GetUserListRequestDTO getUserListRequestDTO

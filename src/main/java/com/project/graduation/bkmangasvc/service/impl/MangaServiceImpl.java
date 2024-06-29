@@ -18,10 +18,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -256,7 +253,57 @@ public class MangaServiceImpl implements MangaService {
         MangaStatus mangaStatus = getMangaStatus(updateMangaRequestDTO.getMangaStatusId());
         AgeRange ageRange = getAgeRangeValue(updateMangaRequestDTO.getAgeRangeId());
 
-        return null;
+        List<Integer> listGenreIdOrigin = manga.getGenreMangaList().stream().map(
+                element -> element.getGenre().getId())
+                .toList();
+
+        List<Integer> listAuthorIdOrigin = manga.getMangaAuthorList().stream().map(
+                element -> element.getAuthor().getId()
+        ).toList();
+
+        HashSet<Integer> hashSetGenreOrigin = new HashSet<>(listGenreIdOrigin);
+        HashSet<Integer> hashSetGenre = new HashSet<>(updateMangaRequestDTO.getListAuthorId());
+        HashSet<Integer> hashSetAuthorOrigin = new HashSet<>(listAuthorIdOrigin);
+        HashSet<Integer> hashSetAuthor = new HashSet<>(updateMangaRequestDTO.getListAuthorId());
+
+        if (!hashSetGenreOrigin.equals(hashSetGenre)) {
+            genreMangaRepository.deleteAllByManga(manga);
+
+            List<GenreManga> newGenreList = new ArrayList<>();
+
+            List<Genre> genreList = genreRepository.findByIdIn(updateMangaRequestDTO.getListGenreId());
+
+            for (Genre genre : genreList) {
+                newGenreList.add(new GenreManga(manga, genre));
+            }
+
+            genreMangaRepository.saveAll(newGenreList);
+        }
+
+        if (!hashSetAuthorOrigin.equals(hashSetAuthor)) {
+            mangaAuthorRepository.deleteAllByManga(manga);
+
+            List<MangaAuthor> newAuthorList = new ArrayList<>();
+
+            List<Author> authorList = authorRepository.findByIdIn(updateMangaRequestDTO.getListAuthorId());
+
+            for (Author author : authorList) {
+                newAuthorList.add(new MangaAuthor(author, manga));
+            }
+
+            mangaAuthorRepository.saveAll(newAuthorList);
+        }
+
+        manga.setName(updateMangaRequestDTO.getName());
+        manga.setOtherName(updateMangaRequestDTO.getOtherName());
+        manga.setDescription(updateMangaRequestDTO.getDescription());
+        manga.setMangaStatus(mangaStatus);
+        manga.setAgeRange(ageRange);
+        manga.setUpdatedBy(userUpdate);
+
+        mangaRepository.save(manga);
+
+        return ApiResponse.successWithResult(manga);
     }
 
     private Genre getGenreValue(Integer genreId) throws CustomException {

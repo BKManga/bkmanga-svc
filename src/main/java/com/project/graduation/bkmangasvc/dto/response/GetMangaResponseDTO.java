@@ -39,5 +39,7 @@ public class GetMangaResponseDTO {
 
     private Integer numberOfLikes;
 
+    private AgeRange ageRange;
+
     private Date createdAt;
 }

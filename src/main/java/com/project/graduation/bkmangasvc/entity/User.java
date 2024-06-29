@@ -48,7 +48,6 @@ public class User {
             updatable=false,
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
     )
-    @JsonIgnore
     private Date createdAt;
 
     @UpdateTimestamp
@@ -61,12 +60,10 @@ public class User {
     private Date updatedAt;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "gender_id", nullable = false)
     private Gender gender;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "status_id", nullable = false)
     private UserStatus userStatus;
 

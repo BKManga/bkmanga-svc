@@ -89,6 +89,6 @@ public class MangaController {
     public ApiResponse<Manga> updateManga(
             @Valid @RequestBody UpdateMangaRequestDTO updateMangaRequestDTO
     ) throws CustomException {
-        return null;
+        return mangaService.updateManga(updateMangaRequestDTO);
     }
 }

@@ -16,4 +16,6 @@ public interface GenreMangaRepository extends JpaRepository<GenreManga, Long> {
     List<GenreManga> findGenreMangaByGenre(Genre genre);
 
     List<GenreManga> findGenreMangaByGenreIn(List<Genre> genreApproveList);
+
+    void deleteAllByManga(Manga manga);
 }
