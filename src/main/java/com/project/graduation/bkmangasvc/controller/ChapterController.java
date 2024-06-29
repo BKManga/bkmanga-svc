@@ -6,6 +6,7 @@ import com.project.graduation.bkmangasvc.entity.Chapter;
 import com.project.graduation.bkmangasvc.exception.CustomException;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
 import com.project.graduation.bkmangasvc.service.ChapterService;
+import com.project.graduation.bkmangasvc.service.FileService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.List;
 public class ChapterController {
 
     private final ChapterService chapterService;
+    private final FileService fileService;
 
     @PostMapping(path = "/get")
     public ApiResponse<List<Chapter>> getChapterByManga(

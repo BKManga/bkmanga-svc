@@ -18,8 +18,10 @@ public interface MangaService {
             GetMangaListByUploadChapterRequestDTO getMangaListByUploadChapterRequestDTO
     );
 
+    ApiResponse<Page<GetMangaResponseDTO>> getMangaList (GetMangaRequestDTO getMangaRequestDTO);
+
     ApiResponse<GetMangaResponseDTO> getMangaDetail(
-            GetMangaRequestDTO getMangaRequestDTO
+            GetMangaDetailRequestDTO getMangaDetailRequestDTO
     ) throws CustomException;
 
     ApiResponse<Page<GetMangaResponseDTO>> searchMangaByName(GetMangaByNameRequestDTO getMangaByNameRequestDTO);

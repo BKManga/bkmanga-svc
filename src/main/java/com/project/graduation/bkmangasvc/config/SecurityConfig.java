@@ -68,6 +68,7 @@ public class SecurityConfig {
 
         final List<String> publicMangaEndPoints = List.of(
                 "api/v1/manga/search/by/name",
+                "api/v1/manga/get",
                 "api/v1/manga/get/lastUpload",
                 "api/v1/manga/search/by/genre",
                 "api/v1/manga/search/by/author",
@@ -107,6 +108,15 @@ public class SecurityConfig {
                 "api/v1/author/detail"
         );
 
+        final List<String> publicFileHandleEndPoints = List.of(
+                "api/v1/file/manga/image-logo/{mangaId}",
+                "api/v1/file/manga/image-large/{mangaId}",
+                "api/v1/file/image/manga/{mangaId}/chapter/{chapterId}/{imageName:.+}",
+                "api/v1/file/user/profile/{userId}",
+                "api/v1/file/user/profile",
+                "api/v1/file/image/chapter/all"
+        );
+
         return Stream.of(
                 publicDocEndPoints,
                 publicMangaEndPoints,
@@ -116,7 +126,8 @@ public class SecurityConfig {
                 publicGenreEndPoints,
                 publicAuthEndPoints,
                 publicPrivacyPolicyEndPoints,
-                publicAuthorEndPoints
+                publicAuthorEndPoints,
+                publicFileHandleEndPoints
         ).flatMap(Collection::stream).toList().toArray(String[]::new);
     }
 }

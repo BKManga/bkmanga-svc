@@ -1,9 +1,6 @@
 package com.project.graduation.bkmangasvc.controller;
 
-import com.project.graduation.bkmangasvc.dto.request.CreateAuthorRequestDTO;
-import com.project.graduation.bkmangasvc.dto.request.GetAuthorDetailRequestDTO;
-import com.project.graduation.bkmangasvc.dto.request.GetListAuthorRequestDTO;
-import com.project.graduation.bkmangasvc.dto.request.UpdateAuthorRequestDTO;
+import com.project.graduation.bkmangasvc.dto.request.*;
 import com.project.graduation.bkmangasvc.entity.Author;
 import com.project.graduation.bkmangasvc.exception.CustomException;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
@@ -40,6 +37,13 @@ public class AuthorController {
             @Valid @RequestBody GetAuthorDetailRequestDTO getAuthorDetailRequestDTO
     ) throws CustomException {
         return authorService.getAuthorDetail(getAuthorDetailRequestDTO);
+    }
+
+    @PostMapping(path = "/search/byName")
+    ApiResponse<Page<Author>> getAuthorListByName(
+            @Valid @RequestBody GetListAuthorByNameDTO getListAuthorByNameDTO
+    ) {
+        return authorService.getListAuthorByName(getListAuthorByNameDTO);
     }
 
     @PostMapping(path = "/create")

@@ -1,10 +1,7 @@
 package com.project.graduation.bkmangasvc.service.impl;
 
 import com.project.graduation.bkmangasvc.constant.ErrorCode;
-import com.project.graduation.bkmangasvc.dto.request.CreateAuthorRequestDTO;
-import com.project.graduation.bkmangasvc.dto.request.GetAuthorDetailRequestDTO;
-import com.project.graduation.bkmangasvc.dto.request.GetListAuthorRequestDTO;
-import com.project.graduation.bkmangasvc.dto.request.UpdateAuthorRequestDTO;
+import com.project.graduation.bkmangasvc.dto.request.*;
 import com.project.graduation.bkmangasvc.entity.Author;
 import com.project.graduation.bkmangasvc.exception.CustomException;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
@@ -54,6 +51,20 @@ public class AuthorServiceImpl implements AuthorService {
         Author author = getAuthorValue(getAuthorDetailRequestDTO.getAuthorId());
 
         return ApiResponse.successWithResult(author);
+    }
+
+    @Override
+    public ApiResponse<Page<Author>> getListAuthorByName(
+            GetListAuthorByNameDTO getListAuthorByNameDTO
+    ) {
+        Pageable pageable = PageRequest.of(
+                getListAuthorByNameDTO.getPage(),
+                getListAuthorByNameDTO.getSize()
+        );
+
+        Page<Author> authorPage = authorRepository.findByNameContainingOrderByNameAsc(getListAuthorByNameDTO.getName(), pageable);
+
+        return ApiResponse.successWithResult(authorPage);
     }
 
     @Override

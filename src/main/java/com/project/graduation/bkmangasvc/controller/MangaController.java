@@ -27,6 +27,13 @@ public class MangaController {
         return mangaService.getListTopManga();
     }
 
+    @PostMapping(path = "/get")
+    public ApiResponse<Page<GetMangaResponseDTO>> getMangaList(
+            @Valid @RequestBody GetMangaRequestDTO getMangaRequestDTO
+    ) {
+        return mangaService.getMangaList(getMangaRequestDTO);
+    }
+
     @PostMapping(path = "/get/lastUpload")
     public ApiResponse<Page<GetMangaResponseDTO>> getMangaListByLastUploadChapter(
             @Valid @RequestBody GetMangaListByUploadChapterRequestDTO getMangaListByUploadChapterRequestDTO
@@ -36,9 +43,9 @@ public class MangaController {
 
     @PostMapping(path = "/detail")
     public ApiResponse<GetMangaResponseDTO> getMangaDetail(
-            @Valid @RequestBody GetMangaRequestDTO getMangaRequestDTO
+            @Valid @RequestBody GetMangaDetailRequestDTO getMangaDetailRequestDTO
     ) throws CustomException {
-        return mangaService.getMangaDetail(getMangaRequestDTO);
+        return mangaService.getMangaDetail(getMangaDetailRequestDTO);
     }
 
     @PostMapping(path = "/search/by/name")

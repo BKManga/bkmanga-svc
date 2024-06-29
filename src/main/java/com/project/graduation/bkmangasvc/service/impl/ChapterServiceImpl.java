@@ -132,7 +132,7 @@ public class ChapterServiceImpl implements ChapterService {
         return foundChapter.get();
     }
 
-    private User getUserValue(Long userId) throws CustomException{
+    private User getUserValue(Long userId) throws CustomException {
 
         Optional<UserStatus> userStatus = userStatusRepository.findById(UserStatusEnum.ACTIVE.getCode());
 

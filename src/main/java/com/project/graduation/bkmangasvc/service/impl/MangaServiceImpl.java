@@ -71,11 +71,25 @@ public class MangaServiceImpl implements MangaService {
     }
 
     @Override
+    public ApiResponse<Page<GetMangaResponseDTO>> getMangaList(GetMangaRequestDTO getMangaRequestDTO) {
+        Pageable pageable = PageRequest.of(
+                getMangaRequestDTO.getPage(),
+                getMangaRequestDTO.getSize()
+        );
+
+        Page<Manga> mangaPage = mangaRepository.findAll(pageable);
+
+        Page<GetMangaResponseDTO> mangaResponseDTOPage = mangaPage.map(this::getMangaResponseDTO);
+
+        return ApiResponse.successWithResult(mangaResponseDTOPage);
+    }
+
+    @Override
     public ApiResponse<GetMangaResponseDTO> getMangaDetail(
-            GetMangaRequestDTO getMangaRequestDTO
+            GetMangaDetailRequestDTO getMangaDetailRequestDTO
     ) throws CustomException {
 
-        Manga foundManga = getMangaValue(getMangaRequestDTO.getMangaId());
+        Manga foundManga = getMangaValue(getMangaDetailRequestDTO.getMangaId());
 
         return ApiResponse.successWithResult(getMangaResponseDTO(foundManga));
     }

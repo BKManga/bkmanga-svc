@@ -21,7 +21,12 @@ public enum ErrorCode {
     AUTHOR_EXISTED("AUTHOR_EXISTED", "Tác giả đã tồn tại"),
     AUTHOR_NAME_EXISTED("AUTHOR_NAME_EXISTED", "Tên tác giả đã tồn tại"),
     GENRE_EXISTED("GENRE_EXISTED", "Thể loại truyện đã tồn tại"),
-    GENRE_NAME_EXISTED("GENRE_NAME_EXISTED", "Tên thể loại truyện đã tồn tại");
+    GENRE_NAME_EXISTED("GENRE_NAME_EXISTED", "Tên thể loại truyện đã tồn tại"),
+    IMAGE_EXTENSION("IMAGE_EXTENSTION", "Định dạng ảnh không đúng"),
+    IMAGE_SIZE("IMAGE_SIZE", "Định dạng ảnh không đúng"),
+    IMAGE_ERROR("IMAGE_ERROR", "Lỗi khi lấy ảnh"),
+    IMAGE_CHAPTER_NOT_FOUND("IMAGE_CHAPTER_NOT_FOUND", "Không thể tải được ảnh truyện")
+    ;
 
     private final String code;
 

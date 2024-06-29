@@ -15,4 +15,6 @@ public interface AuthorRepository extends JpaRepository<Author, Integer> {
     List<Author> findByIdIn(List<Integer> listAuthorId);
 
     Optional<Author> findByName(String name);
+
+    Page<Author> findByNameContainingOrderByNameAsc(String name, Pageable pageable);
 }

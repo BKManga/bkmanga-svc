@@ -1,9 +1,6 @@
 package com.project.graduation.bkmangasvc.service;
 
-import com.project.graduation.bkmangasvc.dto.request.CreateAuthorRequestDTO;
-import com.project.graduation.bkmangasvc.dto.request.GetAuthorDetailRequestDTO;
-import com.project.graduation.bkmangasvc.dto.request.GetListAuthorRequestDTO;
-import com.project.graduation.bkmangasvc.dto.request.UpdateAuthorRequestDTO;
+import com.project.graduation.bkmangasvc.dto.request.*;
 import com.project.graduation.bkmangasvc.entity.Author;
 import com.project.graduation.bkmangasvc.exception.CustomException;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
@@ -17,6 +14,8 @@ public interface AuthorService {
     ApiResponse<Page<Author>> getListAuthor(GetListAuthorRequestDTO getListAuthorRequestDTO);
 
     ApiResponse<Author> getAuthorDetail(GetAuthorDetailRequestDTO getAuthorDetailRequestDTO) throws CustomException;
+
+    ApiResponse<Page<Author>> getListAuthorByName(GetListAuthorByNameDTO getListAuthorByNameDTO);
 
     ApiResponse<Author> createAuthor(CreateAuthorRequestDTO createAuthorRequestDTO) throws CustomException;
 

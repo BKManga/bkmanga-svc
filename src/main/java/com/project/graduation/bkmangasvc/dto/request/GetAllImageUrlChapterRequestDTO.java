@@ -5,11 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Data
-@AllArgsConstructor
-public class DeleteChapterCommentRequestDTO {
+public class GetAllImageUrlChapterRequestDTO {
 
     @NotNull
-    private Long chapterCommentId;
+    private Long mangaId;
+
+    @NotNull
+    private Long chapterId;
 }

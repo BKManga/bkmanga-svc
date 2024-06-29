@@ -28,7 +28,6 @@ public class ErrorChapterReport {
     private String description;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "uploaded_by")
     private User uploadedBy;
 
@@ -63,7 +62,6 @@ public class ErrorChapterReport {
     private Chapter chapter;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "error_report_status_id")
     private ErrorReportStatus errorReportStatus;
 }
