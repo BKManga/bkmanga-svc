@@ -1,6 +1,7 @@
 package com.project.graduation.bkmangasvc.controller;
 
 import com.project.graduation.bkmangasvc.dto.request.*;
+import com.project.graduation.bkmangasvc.dto.response.CreateMangaResponseDTO;
 import com.project.graduation.bkmangasvc.dto.response.GetMangaResponseDTO;
 import com.project.graduation.bkmangasvc.dto.response.GetMangaTopResponseDTO;
 import com.project.graduation.bkmangasvc.entity.Manga;
@@ -78,7 +79,7 @@ public class MangaController {
 
     @PostMapping(path = "/create")
     @Transactional(rollbackOn = CustomException.class)
-    public ApiResponse<Manga> createManga(
+    public ApiResponse<CreateMangaResponseDTO> createManga(
             @Valid @RequestBody CreateMangaRequestDTO createMangaRequestDTO
     ) throws CustomException {
         return mangaService.createManga(createMangaRequestDTO);

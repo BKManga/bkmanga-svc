@@ -9,15 +9,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
-public class UpdateInfoUserRequestDTO {
-
-    @NotNull
-    private Long userId;
+public class UpdateAuthPasswordRequestDTO {
 
     @NotNull
     @NotBlank
-    private String fullName;
+    private String oldPassword;
 
     @NotNull
-    private Integer genderId;
+    @NotBlank
+    private String newPassword;
 }

@@ -17,10 +17,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Configuration
@@ -95,7 +93,7 @@ public class SecurityConfig {
 
         final List<String> publicAuthEndPoints = List.of(
                 "api/v1/auth/login",
-                "api/v1/register"
+                "api/v1/auth/register"
         );
 
         final List<String> publicPrivacyPolicyEndPoints = List.of(
@@ -109,12 +107,13 @@ public class SecurityConfig {
         );
 
         final List<String> publicFileHandleEndPoints = List.of(
-                "api/v1/file/manga/image-logo/{mangaId}",
-                "api/v1/file/manga/image-large/{mangaId}",
+                "api/v1/file/manga/image_logo/{mangaId}",
+                "api/v1/file/manga/image_large/{mangaId}",
                 "api/v1/file/image/manga/{mangaId}/chapter/{chapterId}/{imageName:.+}",
-                "api/v1/file/user/profile/{userId}",
-                "api/v1/file/user/profile",
-                "api/v1/file/image/chapter/all"
+                "api/v1/file/user/profile/manage/{userId}",
+                "api/v1/file/user/profile/{username}",
+                "api/v1/file/image/chapter/all",
+                "api/v1/file/chapter/upload"
         );
 
         return Stream.of(

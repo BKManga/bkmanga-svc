@@ -6,7 +6,6 @@ import com.project.graduation.bkmangasvc.controller.FileController;
 import com.project.graduation.bkmangasvc.entity.User;
 import com.project.graduation.bkmangasvc.entity.UserStatus;
 import com.project.graduation.bkmangasvc.exception.CustomException;
-import com.project.graduation.bkmangasvc.helper.TokenHelper;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
 import com.project.graduation.bkmangasvc.repository.UserRepository;
 import com.project.graduation.bkmangasvc.repository.UserStatusRepository;
@@ -22,6 +21,8 @@ import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -31,6 +32,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 @Service
 @AllArgsConstructor
@@ -41,22 +44,67 @@ public class FileServiceImpl implements FileService {
     private final String chapterStorageGeneralDir = "/chapter/";
     private final UserStatusRepository userStatusRepository;
     private final UserRepository userRepository;
+    private final String tempStorageGeneralDir = "uploads/temp";
 
     @Override
     public ApiResponse<?> uploadLogoManga(MultipartFile file, Long mangaId, String target) throws CustomException {
-        final Path storagePath = Paths.get(mangaStorageGeneralDir + mangaId);
+        try {
+            final Path storagePath = Paths.get(mangaStorageGeneralDir + mangaId);
 
-        createDirectory(storagePath);
-        boolean checkFile = (isCorrectExtension(file) && isCorrectImageSize(file));
+            createDirectory(storagePath);
+//            boolean checkFile = (isCorrectExtension(file) && isCorrectImageSize(file));
 
-        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-        String imageLogoName = target + "." + extension;
+//        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+            String extension = "png";
+            String imageLogoName = target + "." + extension;
 
-        Path destination = storagePath.resolve(Paths.get(imageLogoName)).normalize().toAbsolutePath();
+            Path destination = storagePath.resolve(Paths.get(imageLogoName)).normalize().toAbsolutePath();
 
-        storageImage(file, destination);
+            byte[] bytes = file.getBytes();
 
-        return ApiResponse.successWithResult(null);
+            Files.write(destination, bytes);
+
+//        storageImage(file, destination);
+
+            return ApiResponse.successWithResult(null);
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.IMAGE_UPLOAD_ERROR);
+        }
+    }
+
+    @Override
+    public ApiResponse<?> uploadImageProfile(MultipartFile file, String username) throws CustomException {
+        Optional<User> foundUser = userRepository.findByUsername(username);
+
+        if (foundUser.isEmpty()) {
+            throw new CustomException(ErrorCode.USER_NOT_EXIST);
+        }
+
+        return uploadImageUserProfile(file, foundUser.get().getId());
+    }
+
+    @Override
+    public ApiResponse<?> uploadImageUserProfile(MultipartFile file, Long userId) throws CustomException {
+        try {
+            final Path storagePath = Paths.get(userStorageGeneralDir + userId);
+
+            createDirectory(storagePath);
+//        boolean checkFile = (isCorrectExtension(file) && isCorrectImageSize(file));
+
+            String imageProfileName = "profile.png";
+
+            Path destination = storagePath.resolve(Paths.get(imageProfileName)).normalize().toAbsolutePath();
+
+            byte[] bytes = file.getBytes();
+
+            Files.write(destination, bytes);
+
+//            storageImage(file, destination);
+
+            return ApiResponse.successWithResult(null);
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.IMAGE_UPLOAD_ERROR);
+        }
     }
 
     @Override
@@ -100,7 +148,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public ResponseEntity<byte[]> getImageProfileManga(Long userId) throws CustomException {
+    public ResponseEntity<byte[]> getImageProfileUser(Long userId) throws CustomException {
         try {
             Path file = Paths.get(userStorageGeneralDir + userId).resolve("profile.png");
 
@@ -120,8 +168,14 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public ResponseEntity<byte[]> getImageProfileUserManga() throws CustomException {
-        return getImageProfileManga(TokenHelper.getPrincipal());
+    public ResponseEntity<byte[]> getImageProfile(String username) throws CustomException {
+        Optional<User> foundUser = userRepository.findByUsername(username);
+
+        if (foundUser.isEmpty()) {
+            throw new CustomException(ErrorCode.USER_NOT_EXIST);
+        }
+
+        return getImageProfileUser(foundUser.get().getId());
     }
 
     @Override
@@ -206,6 +260,42 @@ public class FileServiceImpl implements FileService {
         }
     }
 
+    public void copyProfileImage(Long userId) throws CustomException {
+        try {
+            final Path profilePath = Paths.get(userStorageGeneralDir + "profile.png");
+            final Path storagePath = Paths.get(userStorageGeneralDir + userId);
+
+            createDirectory(storagePath);
+
+            Path destinationFilePage = storagePath.resolve("profile.png").normalize().toAbsolutePath();
+
+            Files.copy(profilePath, destinationFilePage, StandardCopyOption.REPLACE_EXISTING);
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.UNKNOWN_ERROR);
+        }
+    }
+
+    @Override
+    public ApiResponse<?> uploadChapterManga(MultipartFile file, Long chapterId, Long mangaId) throws CustomException {
+        try {
+            final Path storagePath = Paths.get(tempStorageGeneralDir + chapterStorageGeneralDir);
+
+            createDirectory(storagePath);
+
+            byte[] bytes = file.getBytes();
+            final Path destinationTempPath = storagePath.resolve(chapterId + ".zip").normalize().toAbsolutePath();
+            Files.write(destinationTempPath, bytes);
+
+            unzipFile(destinationTempPath, chapterId, mangaId);
+
+            Files.delete(destinationTempPath);
+
+            return ApiResponse.successWithResult(null);
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.CHAPTER_IMAGE_UPLOAD_ERROR);
+        }
+    }
+
     private void createDirectory(Path storagePath) throws CustomException {
         try {
             Files.createDirectories(storagePath);
@@ -231,4 +321,50 @@ public class FileServiceImpl implements FileService {
 
         return foundUser.get();
     }
+
+    private void unzipFile(Path destinationZipFile, Long chapterId, Long mangaId) throws CustomException {
+        try {
+            Path destinationFile = Paths.get(mangaStorageGeneralDir + mangaId + chapterStorageGeneralDir + chapterId);
+            createDirectory(destinationFile);
+            ZipInputStream zis = new ZipInputStream(Files.newInputStream(destinationZipFile));
+            ZipEntry zipEntry;
+            int indexImage = 1;
+            while ((zipEntry = zis.getNextEntry()) != null) {
+                if (checkEntry(zipEntry)) {
+                    String filePath = destinationFile.resolve(indexImage + "." + MediaType.IMAGE_PNG.getSubtype())
+                            .normalize()
+                            .toAbsolutePath()
+                            .toString();
+
+                    extractFile(zis, filePath);
+                    indexImage++;
+                }
+                zis.closeEntry();
+            }
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.UNKNOWN_ERROR);
+        }
+    }
+
+    private void extractFile(ZipInputStream zis, String filePath) throws CustomException {
+        try (FileOutputStream fileOutputStream = new FileOutputStream(filePath)) {
+
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = zis.read(buffer)) > 0) {
+                fileOutputStream.write(buffer, 0, len);
+            }
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.UNKNOWN_ERROR);
+        }
+    }
+
+    private boolean checkEntry (ZipEntry zipEntry) {
+        return (!zipEntry.isDirectory() &&
+                zipEntry.getName().contains(MediaType.IMAGE_PNG.getSubtype()) &&
+                !zipEntry.getName().contains("__MACOSX/")
+        );
+    }
+
+
 }

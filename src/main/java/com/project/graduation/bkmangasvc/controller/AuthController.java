@@ -1,8 +1,11 @@
 package com.project.graduation.bkmangasvc.controller;
 
+import com.project.graduation.bkmangasvc.dto.request.UpdateAuthPasswordRequestDTO;
+import com.project.graduation.bkmangasvc.dto.request.UpdateInfoProfileRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.UserLoginRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.UserRegisterRequestDTO;
 import com.project.graduation.bkmangasvc.dto.response.GetAuthInfoResponseDTO;
+import com.project.graduation.bkmangasvc.dto.response.UpdateAuthPasswordResponseDTO;
 import com.project.graduation.bkmangasvc.dto.response.UserLoginResponseDTO;
 import com.project.graduation.bkmangasvc.exception.CustomException;
 import com.project.graduation.bkmangasvc.model.ApiResponse;
@@ -21,7 +24,9 @@ public class AuthController {
     final private AuthService authService;
 
     @PostMapping(path = "/login")
-    public ApiResponse<UserLoginResponseDTO> login(@Valid @RequestBody UserLoginRequestDTO userLoginRequestDTO) {
+    public ApiResponse<UserLoginResponseDTO> login(
+            @Valid @RequestBody UserLoginRequestDTO userLoginRequestDTO
+    ) throws CustomException {
         return authService.login(userLoginRequestDTO);
     }
 
@@ -38,20 +43,19 @@ public class AuthController {
         return authService.getAuthInfo();
     }
 
-    @PreAuthorize("hasAuthority('USER')")
-    @GetMapping(path = "/test/user")
-    public String testUser() {
-        return "USER";
+    @PutMapping(path = "/info/update")
+    @Transactional(rollbackOn = {CustomException.class})
+    public ApiResponse<?> updateAuthInfo(
+            @Valid @RequestBody UpdateInfoProfileRequestDTO updateInfoProfileRequestDTO
+    ) throws CustomException {
+        return authService.updateInfoProfile(updateInfoProfileRequestDTO);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping(path = "/test/admin")
-    public String testAdmin() {
-        return "ADMIN";
-    }
-
-    @GetMapping(path = "/testing")
-    public ApiResponse<String> test() {
-        return ApiResponse.successWithResult("TEST");
+    @PutMapping(path = "/password/update")
+    @Transactional(rollbackOn = {CustomException.class})
+    public ApiResponse<UpdateAuthPasswordResponseDTO> updateAuthPassword(
+            @Valid @RequestBody UpdateAuthPasswordRequestDTO updateAuthPasswordRequestDTO
+    ) throws CustomException {
+        return authService.updateAuthPassword(updateAuthPasswordRequestDTO);
     }
 }

@@ -9,10 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
-public class UpdateInfoUserRequestDTO {
-
-    @NotNull
-    private Long userId;
+public class UpdateInfoProfileRequestDTO {
 
     @NotNull
     @NotBlank

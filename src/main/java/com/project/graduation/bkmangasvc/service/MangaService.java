@@ -1,6 +1,7 @@
 package com.project.graduation.bkmangasvc.service;
 
 import com.project.graduation.bkmangasvc.dto.request.*;
+import com.project.graduation.bkmangasvc.dto.response.CreateMangaResponseDTO;
 import com.project.graduation.bkmangasvc.dto.response.GetMangaResponseDTO;
 import com.project.graduation.bkmangasvc.dto.response.GetMangaTopResponseDTO;
 import com.project.graduation.bkmangasvc.entity.Manga;
@@ -38,7 +39,7 @@ public interface MangaService {
             GetMangaByFilterRequestDTO getMangaByFilterRequestDTO
     ) throws CustomException;
 
-    ApiResponse<Manga> createManga(CreateMangaRequestDTO createMangaRequestDTO) throws CustomException;
+    ApiResponse<CreateMangaResponseDTO> createManga(CreateMangaRequestDTO createMangaRequestDTO) throws CustomException;
 
     ApiResponse<Manga> updateManga(UpdateMangaRequestDTO updateMangaRequestDTO) throws CustomException;
 }

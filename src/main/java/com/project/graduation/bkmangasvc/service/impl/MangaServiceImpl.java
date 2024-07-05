@@ -5,6 +5,7 @@ import com.project.graduation.bkmangasvc.constant.MangaStatusEnum;
 import com.project.graduation.bkmangasvc.constant.SortingOrderBy;
 import com.project.graduation.bkmangasvc.constant.UserStatusEnum;
 import com.project.graduation.bkmangasvc.dto.request.*;
+import com.project.graduation.bkmangasvc.dto.response.CreateMangaResponseDTO;
 import com.project.graduation.bkmangasvc.dto.response.GetMangaResponseDTO;
 import com.project.graduation.bkmangasvc.dto.response.GetMangaTopResponseDTO;
 import com.project.graduation.bkmangasvc.entity.*;
@@ -197,7 +198,7 @@ public class MangaServiceImpl implements MangaService {
     }
 
     @Override
-    public ApiResponse<Manga> createManga(CreateMangaRequestDTO createMangaRequestDTO) throws CustomException {
+    public ApiResponse<CreateMangaResponseDTO> createManga(CreateMangaRequestDTO createMangaRequestDTO) throws CustomException {
         List<Author> authorList = authorRepository.findByIdIn(createMangaRequestDTO.getListAuthorId());
         List<Genre> genreList = genreRepository.findByIdIn(createMangaRequestDTO.getListGenreId());
         User userUpdate = getUserValue(TokenHelper.getPrincipal());
@@ -242,7 +243,12 @@ public class MangaServiceImpl implements MangaService {
 
         viewMangaRepository.save(viewManga);
 
-        return ApiResponse.successWithResult(manga);
+        CreateMangaResponseDTO createMangaResponseDTO = new CreateMangaResponseDTO(
+                manga,
+                chapter
+        );
+
+        return ApiResponse.successWithResult(createMangaResponseDTO);
     }
 
     @Override
