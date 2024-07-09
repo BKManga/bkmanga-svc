@@ -37,11 +37,13 @@ public class OutLawReportServiceImpl implements OutLawReportService {
     @Override
     public ApiResponse<Page<OutLawReport>> getAllOutLawReport(
             GetListOutLawReportRequestDTO getListOutLawReportRequestDTO
-    ) {
+    ) throws CustomException {
         Pageable pageable = PageRequest.of(
                 getListOutLawReportRequestDTO.getPage(),
                 getListOutLawReportRequestDTO.getSize()
         );
+
+//        OutLawProcessStatus outLawProcessStatus = getOutLawProcessStatusValue(OutLawProcessStatusEnum.NEW.getCode());
 
         Page<OutLawReport> outLawReportPage = outLawReportRepository.findByOrderByCreatedAtDesc(pageable);
 

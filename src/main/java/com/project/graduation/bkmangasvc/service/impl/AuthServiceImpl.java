@@ -55,13 +55,15 @@ public class AuthServiceImpl implements AuthService {
     public ApiResponse<UserLoginResponseDTO> login(UserLoginRequestDTO userLoginRequestDTO) throws CustomException {
 
         try {
+            User userValid = getUserValid(userLoginRequestDTO.getLoginID());
+
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             userLoginRequestDTO.getLoginID(),
                             userLoginRequestDTO.getPassword()
                     )
             );
-            
+
             String token = tokenUtil.generateToken(authentication);
             return ApiResponse.successWithResult(new UserLoginResponseDTO(token));
         } catch (Exception e) {
@@ -179,6 +181,22 @@ public class AuthServiceImpl implements AuthService {
         }
 
         Optional<User> foundUser = userRepository.findByIdAndUserStatus(userId, userStatus.get());
+
+        if (foundUser.isEmpty()) {
+            throw new CustomException(ErrorCode.USER_NOT_EXIST);
+        }
+
+        return foundUser.get();
+    }
+
+    private User getUserValid(String username) throws CustomException {
+        Optional<UserStatus> userStatus = userStatusRepository.findById(UserStatusEnum.ACTIVE.getCode());
+
+        if (userStatus.isEmpty()) {
+            throw new CustomException(ErrorCode.UNKNOWN_ERROR);
+        }
+
+        Optional<User> foundUser = userRepository.findByUsernameAndUserStatus(username, userStatus.get());
 
         if (foundUser.isEmpty()) {
             throw new CustomException(ErrorCode.USER_NOT_EXIST);

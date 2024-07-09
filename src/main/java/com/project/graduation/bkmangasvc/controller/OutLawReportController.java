@@ -24,7 +24,7 @@ public class OutLawReportController {
     @PostMapping(path = "/get")
     public ApiResponse<Page<OutLawReport>> getOutLawReport(
             @Valid @RequestBody GetListOutLawReportRequestDTO getListOutLawReportRequestDTO
-    ) {
+    ) throws CustomException {
         return outLawReportService.getAllOutLawReport(getListOutLawReportRequestDTO);
     }
 

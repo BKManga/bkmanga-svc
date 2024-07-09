@@ -12,7 +12,7 @@ import org.springframework.data.domain.Page;
 public interface OutLawReportService {
     ApiResponse<Page<OutLawReport>> getAllOutLawReport(
             GetListOutLawReportRequestDTO getListOutLawReportRequestDTO
-    );
+    ) throws CustomException;
 
     ApiResponse<OutLawReport> getOutLawReportById(
             GetOutLawReportByIdRequestDTO getOutLawReportByIdRequestDTO

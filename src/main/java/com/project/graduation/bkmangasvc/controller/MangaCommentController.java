@@ -3,6 +3,7 @@ package com.project.graduation.bkmangasvc.controller;
 import com.project.graduation.bkmangasvc.dto.request.CreateMangaCommentRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.DeleteMangaCommentRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.GetListMangaCommentRequestDTO;
+import com.project.graduation.bkmangasvc.dto.request.GetMangaCommentDetailRequestDTO;
 import com.project.graduation.bkmangasvc.dto.response.CreateMangaCommentResponseDTO;
 import com.project.graduation.bkmangasvc.entity.MangaComment;
 import com.project.graduation.bkmangasvc.exception.CustomException;
@@ -26,6 +27,13 @@ public class MangaCommentController {
             @Valid @RequestBody GetListMangaCommentRequestDTO mangaCommentListRequestDTO
     ) throws CustomException {
         return mangaCommentService.getMangaCommentByMangaId(mangaCommentListRequestDTO);
+    }
+
+    @PostMapping(path = "/detail")
+    public ApiResponse<MangaComment> getMangaCommentDetail(
+            @Valid @RequestBody GetMangaCommentDetailRequestDTO getMangaCommentDetailRequestDTO
+    ) throws CustomException {
+        return null;
     }
 
     @PostMapping(path = "/create")

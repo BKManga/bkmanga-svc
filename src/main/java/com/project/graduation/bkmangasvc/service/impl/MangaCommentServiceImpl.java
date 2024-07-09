@@ -6,6 +6,7 @@ import com.project.graduation.bkmangasvc.constant.UserStatusEnum;
 import com.project.graduation.bkmangasvc.dto.request.CreateMangaCommentRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.DeleteMangaCommentRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.GetListMangaCommentRequestDTO;
+import com.project.graduation.bkmangasvc.dto.request.GetMangaCommentDetailRequestDTO;
 import com.project.graduation.bkmangasvc.dto.response.CreateMangaCommentResponseDTO;
 import com.project.graduation.bkmangasvc.entity.Manga;
 import com.project.graduation.bkmangasvc.entity.MangaComment;
@@ -56,6 +57,15 @@ public class MangaCommentServiceImpl implements MangaCommentService {
         Page<MangaComment> mangaCommentPage = mangaCommentRepository.findMangaCommentByManga(foundManga, pageable);
 
         return ApiResponse.successWithResult(mangaCommentPage);
+    }
+
+    @Override
+    public ApiResponse<MangaComment> getMangaCommentDetail(
+            GetMangaCommentDetailRequestDTO getMangaCommentDetailRequestDTO
+    ) throws CustomException {
+        MangaComment mangaComment = getMangaCommentValue(getMangaCommentDetailRequestDTO.getMangaCommentId());
+
+        return ApiResponse.successWithResult(mangaComment);
     }
 
     @Override
@@ -120,6 +130,16 @@ public class MangaCommentServiceImpl implements MangaCommentService {
         User user = getUserValue(userId);
 
         Optional<MangaComment> foundMangaComment = mangaCommentRepository.findMangaCommentByIdAndUser(id, user);
+
+        if (foundMangaComment.isEmpty()) {
+            throw new CustomException(ErrorCode.MANGA_COMMENT_NOT_EXIST);
+        }
+
+        return foundMangaComment.get();
+    }
+
+    private MangaComment getMangaCommentValue(Long id) throws CustomException {
+        Optional<MangaComment> foundMangaComment = mangaCommentRepository.findById(id);
 
         if (foundMangaComment.isEmpty()) {
             throw new CustomException(ErrorCode.MANGA_COMMENT_NOT_EXIST);

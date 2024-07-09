@@ -2,6 +2,7 @@ package com.project.graduation.bkmangasvc.controller;
 
 import com.project.graduation.bkmangasvc.dto.request.CreateChapterCommentRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.DeleteChapterCommentRequestDTO;
+import com.project.graduation.bkmangasvc.dto.request.GetChapterCommentDetailRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.GetListChapterCommentRequestDTO;
 import com.project.graduation.bkmangasvc.dto.response.CreateChapterCommentResponseDTO;
 import com.project.graduation.bkmangasvc.entity.ChapterComment;
@@ -26,6 +27,13 @@ public class ChapterCommentController {
             @Valid @RequestBody GetListChapterCommentRequestDTO getListChapterCommentRequestDTO
     ) throws CustomException {
         return chapterCommentService.getChapterCommentByMangaId(getListChapterCommentRequestDTO);
+    }
+
+    @PostMapping(path = "/detail")
+    public ApiResponse<ChapterComment> getChapterCommentDetail(
+            @Valid @RequestBody GetChapterCommentDetailRequestDTO getChapterCommentDetailRequestDTO
+    ) throws CustomException {
+        return chapterCommentService.getChapterCommentDetail(getChapterCommentDetailRequestDTO);
     }
 
     @PostMapping(path = "/create")

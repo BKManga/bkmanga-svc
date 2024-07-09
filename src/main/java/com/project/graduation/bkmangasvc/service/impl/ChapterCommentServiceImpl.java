@@ -5,6 +5,7 @@ import com.project.graduation.bkmangasvc.constant.SortingOrderBy;
 import com.project.graduation.bkmangasvc.constant.UserStatusEnum;
 import com.project.graduation.bkmangasvc.dto.request.CreateChapterCommentRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.DeleteChapterCommentRequestDTO;
+import com.project.graduation.bkmangasvc.dto.request.GetChapterCommentDetailRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.GetListChapterCommentRequestDTO;
 import com.project.graduation.bkmangasvc.dto.response.CreateChapterCommentResponseDTO;
 import com.project.graduation.bkmangasvc.entity.*;
@@ -53,6 +54,17 @@ public class ChapterCommentServiceImpl implements ChapterCommentService {
     }
 
     @Override
+    public ApiResponse<ChapterComment> getChapterCommentDetail(
+            GetChapterCommentDetailRequestDTO getChapterCommentDetailRequestDTO
+    ) throws CustomException {
+        ChapterComment chapterComment = getChapterCommentValue(
+                getChapterCommentDetailRequestDTO.getChapterCommentId()
+        );
+
+        return ApiResponse.successWithResult(chapterComment);
+    }
+
+    @Override
     public ApiResponse<CreateChapterCommentResponseDTO> createChapterComment(
             CreateChapterCommentRequestDTO createChapterCommentRequestDTO
     ) throws CustomException {
@@ -88,6 +100,17 @@ public class ChapterCommentServiceImpl implements ChapterCommentService {
         User user = getUserValue(userId);
 
         Optional<ChapterComment> foundChapterComment = chapterCommentRepository.findChapterCommentByIdAndUser(id, user);
+
+        if (foundChapterComment.isEmpty()) {
+            throw new CustomException(ErrorCode.CHAPTER_COMMENT_NOT_EXIST);
+        }
+
+        return foundChapterComment.get();
+    }
+
+    private ChapterComment getChapterCommentValue(Long id) throws CustomException {
+
+        Optional<ChapterComment> foundChapterComment = chapterCommentRepository.findById(id);
 
         if (foundChapterComment.isEmpty()) {
             throw new CustomException(ErrorCode.CHAPTER_COMMENT_NOT_EXIST);
