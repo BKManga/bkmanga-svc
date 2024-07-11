@@ -402,6 +402,7 @@ public class MangaServiceImpl implements MangaService {
     }
 
     private GetMangaTopResponseDTO getMangaTopResponseDTO (Manga manga) {
+
         GetMangaTopResponseDTO getMangaTopResponseDTO = modelMapper.map(manga, GetMangaTopResponseDTO.class);
         getMangaTopResponseDTO.setNumberOfFollow(manga.getFollowList().size());
         getMangaTopResponseDTO.setNumberOfLikes(manga.getLikeMangaList().size());

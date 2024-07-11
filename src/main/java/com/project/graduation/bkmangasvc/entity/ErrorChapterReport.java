@@ -20,7 +20,6 @@ public class ErrorChapterReport {
     private Long id;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "manga_id")
     private Manga manga;
 
@@ -32,7 +31,6 @@ public class ErrorChapterReport {
     private User uploadedBy;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "update_by")
     private User updatedBy;
 
@@ -52,12 +50,10 @@ public class ErrorChapterReport {
     private Date updatedAt;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "error_type_id")
     private ErrorType errorType;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "chapter_id")
     private Chapter chapter;
 

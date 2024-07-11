@@ -20,7 +20,7 @@ public class GetMangaTopResponseDTO {
 
     private String description;
 
-    private Long updatedBy;
+    private User updatedBy;
 
     private MangaStatus mangaStatus;
 

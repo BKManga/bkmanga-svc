@@ -113,7 +113,8 @@ public class SecurityConfig {
                 "api/v1/file/user/profile/manage/{userId}",
                 "api/v1/file/user/profile/{username}",
                 "api/v1/file/image/chapter/all",
-                "api/v1/file/chapter/upload"
+                "api/v1/file/chapter/upload",
+                "api/v1/file/chapter/image/all"
         );
 
         return Stream.of(

@@ -12,7 +12,8 @@ import lombok.NoArgsConstructor;
 public class CreateOutLawReportRequestDTO {
 
     @NotNull
-    private Long userReportedId;
+    @NotBlank
+    private String usernameReported;
 
     private Long commentReportedId;
 

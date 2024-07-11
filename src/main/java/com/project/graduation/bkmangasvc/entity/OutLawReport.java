@@ -34,7 +34,6 @@ public class OutLawReport {
     private User uploadedBy;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "updated_by")
     private User updatedBy;
 

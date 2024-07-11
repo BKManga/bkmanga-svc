@@ -99,6 +99,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         user.setGender(gender);
         user.setFullName(updateInfoUserRequestDTO.getFullName());
+        user.setDateOfBirth(updateInfoUserRequestDTO.getDateOfBirth());
 
         return ApiResponse.successWithResult(user);
     }

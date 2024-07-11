@@ -1,6 +1,7 @@
 package com.project.graduation.bkmangasvc.service;
 
 import com.project.graduation.bkmangasvc.dto.request.CreatePrivacyPolicyRequestDTO;
+import com.project.graduation.bkmangasvc.dto.request.DeletePrivacyPolicyRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.GetPrivacyPolicyDetailRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.UpdatePrivacyPolicyRequestDTO;
 import com.project.graduation.bkmangasvc.entity.PrivacyPolicy;
@@ -22,5 +23,9 @@ public interface PrivacyPolicyService {
 
     ApiResponse<PrivacyPolicy> updatePrivacyPolicy(
             UpdatePrivacyPolicyRequestDTO privacyPolicyEditRequestDTO
+    ) throws CustomException;
+
+    ApiResponse<?> deletePrivacyPolicy(
+            DeletePrivacyPolicyRequestDTO deletePrivacyPolicyRequestDTO
     ) throws CustomException;
 }

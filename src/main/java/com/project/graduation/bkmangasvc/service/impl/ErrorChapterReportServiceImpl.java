@@ -1,6 +1,7 @@
 package com.project.graduation.bkmangasvc.service.impl;
 
 import com.project.graduation.bkmangasvc.constant.ErrorCode;
+import com.project.graduation.bkmangasvc.constant.ErrorReportStatusEnum;
 import com.project.graduation.bkmangasvc.constant.UserStatusEnum;
 import com.project.graduation.bkmangasvc.dto.request.CreateErrorChapterReportRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.GetErrorChapterReportByIdRequestDTO;
@@ -67,6 +68,7 @@ public class ErrorChapterReportServiceImpl implements ErrorChapterReportService 
 
         User userUpload = getUserValue(TokenHelper.getPrincipal());
         ErrorType errorType = getErrorTypeValue(createErrorChapterReportRequestDTO.getErrorTypeId());
+        ErrorReportStatus errorReportStatus = getErrorReportStatusValue(ErrorReportStatusEnum.NEW.getCode());
 
         ErrorChapterReport errorChapterReport = new ErrorChapterReport();
         errorChapterReport.setManga(manga);
@@ -74,6 +76,7 @@ public class ErrorChapterReportServiceImpl implements ErrorChapterReportService 
         errorChapterReport.setErrorType(errorType);
         errorChapterReport.setDescription(createErrorChapterReportRequestDTO.getDescription());
         errorChapterReport.setUploadedBy(userUpload);
+        errorChapterReport.setErrorReportStatus(errorReportStatus);
 
         chapterReportRepository.save(errorChapterReport);
 

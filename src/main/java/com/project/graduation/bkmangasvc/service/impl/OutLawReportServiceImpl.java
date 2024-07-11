@@ -65,7 +65,7 @@ public class OutLawReportServiceImpl implements OutLawReportService {
             CreateOutLawReportRequestDTO createOutLawReportRequestDTO
     ) throws CustomException {
 
-        User userReported = getUserValue(createOutLawReportRequestDTO.getUserReportedId());
+        User userReported = getUserValue(createOutLawReportRequestDTO.getUsernameReported());
         User uploadedBy = getUserValue(TokenHelper.getPrincipal());
 
         OutLawType outLawType = getOutLawTypeValue(createOutLawReportRequestDTO.getOutLawTypeId());
@@ -121,7 +121,7 @@ public class OutLawReportServiceImpl implements OutLawReportService {
         return foundOutLawReport.get();
     }
 
-    private User getUserValue (Long idUser) throws CustomException {
+    private User getUserValue(Long idUser) throws CustomException {
 
         Optional<UserStatus> userStatus = userStatusRepository.findById(UserStatusEnum.ACTIVE.getCode());
 
@@ -130,6 +130,17 @@ public class OutLawReportServiceImpl implements OutLawReportService {
         }
 
         Optional<User> foundUser = userRepository.findByIdAndUserStatus(idUser, userStatus.get());
+
+        if (foundUser.isEmpty()) {
+            throw new CustomException(ErrorCode.USER_NOT_EXIST);
+        }
+
+        return foundUser.get();
+    }
+
+    private User getUserValue(String username) throws CustomException {
+
+        Optional<User> foundUser = userRepository.findByUsername(username);
 
         if (foundUser.isEmpty()) {
             throw new CustomException(ErrorCode.USER_NOT_EXIST);

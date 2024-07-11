@@ -1,6 +1,7 @@
 package com.project.graduation.bkmangasvc.controller;
 
 import com.project.graduation.bkmangasvc.dto.request.CreatePrivacyPolicyRequestDTO;
+import com.project.graduation.bkmangasvc.dto.request.DeletePrivacyPolicyRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.GetPrivacyPolicyDetailRequestDTO;
 import com.project.graduation.bkmangasvc.dto.request.UpdatePrivacyPolicyRequestDTO;
 import com.project.graduation.bkmangasvc.entity.PrivacyPolicy;
@@ -50,5 +51,14 @@ public class PrivacyPolicyController {
             @Valid @RequestBody UpdatePrivacyPolicyRequestDTO privacyPolicyEditRequestDTO
     ) throws CustomException {
         return privacyPolicyService.updatePrivacyPolicy(privacyPolicyEditRequestDTO);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PutMapping("/delete")
+    @Transactional(rollbackOn = {CustomException.class})
+    public ApiResponse<?> deletePrivacyPolicy(
+            @Valid @RequestBody DeletePrivacyPolicyRequestDTO deletePrivacyPolicyRequestDTO
+    ) throws CustomException {
+        return privacyPolicyService.deletePrivacyPolicy(deletePrivacyPolicyRequestDTO);
     }
 }

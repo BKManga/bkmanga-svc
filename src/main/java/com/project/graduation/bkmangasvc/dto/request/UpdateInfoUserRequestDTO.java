@@ -20,4 +20,8 @@ public class UpdateInfoUserRequestDTO {
 
     @NotNull
     private Integer genderId;
+
+    @NotNull
+    @NotBlank
+    private String dateOfBirth;
 }
