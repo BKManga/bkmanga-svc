@@ -70,7 +70,8 @@ public class SecurityConfig {
                 "api/v1/manga/get/lastUpload",
                 "api/v1/manga/search/by/genre",
                 "api/v1/manga/search/by/author",
-                "api/v1/manga/search/by/filter"
+                "api/v1/manga/search/by/filter",
+                "api/v1/manga/get/top"
         );
 
         final List<String> publicChapterEndPoints = List.of(
